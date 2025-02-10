@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:mobile_pos/views/main_page.dart';
 
 class OtpPage extends StatefulWidget {
   const OtpPage({super.key});
@@ -87,7 +88,12 @@ class _OtpPageState extends State<OtpPage> {
                         borderRadius: BorderRadius.circular(10)
                       )
                     ),
-                    onPressed: () {}, 
+                    onPressed: () {
+                      Navigator.push(
+                            context, 
+                            MaterialPageRoute(builder: (context) => MainPage()),
+                            );
+                    }, 
                     child: Text(
                       'VERIFY',
                       style: TextStyle(
@@ -96,6 +102,28 @@ class _OtpPageState extends State<OtpPage> {
                       ),
                     ),
                   ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Didn't receive the OTP?",
+                        style: TextStyle(
+                          color: Colors.black26
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          
+                        }, 
+                        child: Text(
+                          'Resend again',
+                          style: TextStyle(
+                            color: Colors.blueAccent
+                          ),
+                          ),
+                        ),
+                    ],
+                  )
             ],
           )
         ),
