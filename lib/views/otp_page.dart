@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class OtpPage extends StatefulWidget {
   const OtpPage({super.key});
@@ -40,6 +41,44 @@ class _OtpPageState extends State<OtpPage> {
                   ),
                   ),
               ),
+              Text(
+                  "We've sent you an OTP via Email",
+                  style: TextStyle(
+                    color: Colors.black26,
+                    fontSize: 20
+                  ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top:80, bottom: 30),
+                    child: SizedBox(
+                      width: 300,
+                      child: TextField(
+                        keyboardType: TextInputType.number,
+                        cursorColor: Colors.black,
+                        inputFormatters: <TextInputFormatter>[
+                          FilteringTextInputFormatter.digitsOnly // Allow only digits
+                        ],
+                        decoration: InputDecoration(
+                          hintText: 'Enter OTP...',
+                          hintStyle: TextStyle(
+                            color: Colors.black26
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Colors.black26
+                            ),
+                            borderRadius: BorderRadius.circular(10)
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Colors.black26
+                            ),
+                            borderRadius: BorderRadius.circular(10)
+                          )
+                        ),
+                      ),
+                    ),
+                  ),
             ],
           )
         ),
