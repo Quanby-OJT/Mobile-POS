@@ -88,6 +88,35 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ),
                     ),
+                    Padding(
+                      padding: EdgeInsets.only(left: 50, right: 50, top: 20),
+                      child: TextFormField(
+                        cursorColor: Colors.black,
+                        obscureText: true,
+                        obscuringCharacter: '*',
+                        decoration: InputDecoration(
+                          label: Text('Password'),
+                          floatingLabelStyle: TextStyle(
+                            color: Colors.black
+                          ),
+                          hintText: 'Enter Password',
+                          hintStyle: TextStyle(
+                            color: Colors.black12
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Colors.black12
+                            ),
+                            borderRadius: BorderRadius.circular(10)
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Colors.black
+                            )
+                          )
+                        ),
+                      ),
+                    ),
                   ],
                 )
               ),
