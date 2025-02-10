@@ -61,6 +61,33 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                       ),
                     ),
+                    Padding(
+                      padding: EdgeInsets.only(left: 50, right: 50, top: 30),
+                      child: TextFormField(
+                        cursorColor: Colors.black,
+                        decoration: InputDecoration(
+                          label: Text('Email'),
+                          floatingLabelStyle: TextStyle(
+                            color: Colors.black
+                          ),
+                          hintText: 'Enter Email',
+                          hintStyle: TextStyle(
+                            color: Colors.black26
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Colors.black12
+                            ),
+                            borderRadius: BorderRadius.circular(10)
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Colors.black
+                            )
+                          )
+                        ),
+                      ),
+                    ),
                   ],
                 )
               ),
