@@ -117,6 +117,20 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ),
                     ),
+                    Padding(
+                      padding: EdgeInsets.only(right: 50, top:20),
+                      child: Align(
+                        alignment: Alignment.centerRight,
+                        child: GestureDetector(
+                          child: Text(
+                            'Forget Password?',
+                            style: TextStyle(
+                              color: Colors.blueAccent
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
                   ],
                 )
               ),
