@@ -79,6 +79,23 @@ class _OtpPageState extends State<OtpPage> {
                       ),
                     ),
                   ),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      minimumSize: Size(300, 60),
+                      backgroundColor: Color(0xFFEAAE16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10)
+                      )
+                    ),
+                    onPressed: () {}, 
+                    child: Text(
+                      'VERIFY',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold
+                      ),
+                    ),
+                  ),
             ],
           )
         ),
