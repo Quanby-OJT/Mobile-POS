@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../services/user_service.dart';
 import '../models/user_model.dart';
+import '../screens/login/signin.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -43,7 +44,7 @@ class _HomePageState extends State<HomePage> {
       setState(() {
         message = "User added successfully!";
       });
-      loadUsers(); // Refresh users
+      loadUsers();
     } catch (e) {
       setState(() {
         message = "Error: $e";
@@ -60,7 +61,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Flutter + Express + Supabase")),
+      appBar: AppBar(title: Text("Mobile Application")),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -75,7 +76,17 @@ class _HomePageState extends State<HomePage> {
             ElevatedButton(onPressed: addUser, child: Text("Submit")),
             SizedBox(height: 20),
             Text(message, style: TextStyle(color: Colors.red)),
-            Divider(),
+            Column(
+              children: [
+                Text("Users"),
+                SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: () => Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => SignInPage())),
+                  child: Text("Sign In"),
+                )
+              ],
+            ),
             Expanded(
               child: ListView.builder(
                 itemCount: users.length,
