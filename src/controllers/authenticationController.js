@@ -1,0 +1,43 @@
+const UserModel = require('../models/userModel');
+
+class AuthenticationController {
+    static async loginAuthentication(req, res) {
+        try{
+            const {email, password} = req.body
+
+            //Validation Processing
+            if(!email || !password) return res.status(400).json({error: "Email and/or password cannot be empty."})
+            if (!email.includes('@')) return res.status(400).json({ error: 'Invalid email format, must have "@"' })
+            if (!email.includes('.com')) return res.status(400).json({ error: 'Invalid email format, must have ".com"' })
+
+            //Main Authentication
+            const verify = await UserModel.attemptLoginAuth(email, password);
+
+            if(!verify.status) return res.status(400).json({error: "Account is not active."})
+            if(!verify.activation) return res.status(400).json({error: "Account is not verified."})
+
+            if(verify.password !== req.body.password) return res.status(400).json({error: "Incorrect password."})
+            //Code for Redirection and OTP Generation
+            else{
+                UserModel.generateOTP();
+            }
+    
+        }catch(error){
+
+        }
+    }
+
+    static async otpAuthentication(req, res) {
+        try{
+            const {otp, email} = req.body
+
+            const otp_verify = await UserModel.attemptOTPAuth(email)
+
+            if(otp_verify.two_fa_code !== otp) return res.status(301).json({error: "OTP is Incorrect. Please Check Your Email."})
+            
+            return 
+        }catch(error){
+
+        }
+    }
+}
