@@ -17,6 +17,7 @@ class _HomePageState extends State<HomePage> {
   List<User> users = [];
 
   // Fetch users
+  /*
   void loadUsers() async {
     try {
       List<User> fetchedUsers = await UserService.fetchUsers();
@@ -56,7 +57,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     loadUsers();
-  }
+  }*/
 
   @override
   Widget build(BuildContext context) {
@@ -66,14 +67,17 @@ class _HomePageState extends State<HomePage> {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
+            /*
             TextField(
                 controller: nameController,
                 decoration: InputDecoration(labelText: "Name")),
             TextField(
                 controller: emailController,
                 decoration: InputDecoration(labelText: "Email")),
+                *
+             */
             SizedBox(height: 20),
-            ElevatedButton(onPressed: addUser, child: Text("Submit")),
+            //ElevatedButton(onPressed: addUser, child: Text("Submit")),
             SizedBox(height: 20),
             Text(message, style: TextStyle(color: Colors.red)),
             Column(

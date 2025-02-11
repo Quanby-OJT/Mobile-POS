@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_pos/services/user_service.dart';
 import '../auth/otp.dart';
 
 class SignInPage extends StatefulWidget {
@@ -9,6 +10,25 @@ class SignInPage extends StatefulWidget {
 }
 
 class _SignInPageState extends State<SignInPage> {
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  String message = "";
+
+  void loginAuth() async {
+    if (emailController.text.isEmpty || passwordController.text.isEmpty) {
+      setState(() {
+        message = "Please fill in all fields";
+      });
+      return;
+    }
+    try {
+      await UserService.loginAuthentication(emailController.text, passwordController.text);
+    }catch(e){
+      setState(() {
+        message = "Error: $e";
+      });
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -56,6 +76,7 @@ class _SignInPageState extends State<SignInPage> {
                     Padding(
                       padding: EdgeInsets.only(left: 50, right: 50, top: 30),
                       child: TextFormField(
+                        controller: emailController,
                         cursorColor: Colors.black,
                         decoration: InputDecoration(
                             label: Text('Email'),
@@ -70,8 +91,13 @@ class _SignInPageState extends State<SignInPage> {
                       ),
                     ),
                     Padding(
+                      padding: EdgeInsets.only(left: 50, right: 50),
+                      child: Text(message, style: TextStyle(color: Colors.red)),
+                    ),
+                    Padding(
                       padding: EdgeInsets.only(left: 50, right: 50, top: 20),
                       child: TextFormField(
+                        controller: passwordController,
                         cursorColor: Colors.black,
                         obscureText: true,
                         obscuringCharacter: '*',
@@ -86,6 +112,10 @@ class _SignInPageState extends State<SignInPage> {
                             focusedBorder: OutlineInputBorder(
                                 borderSide: BorderSide(color: Colors.black))),
                       ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(left: 50, right: 50),
+                      child: Text(message, style: TextStyle(color: Colors.red)),
                     ),
                     Padding(
                       padding: EdgeInsets.only(right: 50, top: 20),
@@ -108,11 +138,15 @@ class _SignInPageState extends State<SignInPage> {
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10))),
                           onPressed: () {
+                            loginAuth;
+                            /*
                             Navigator.push(
                               context,
                               MaterialPageRoute(
                                   builder: (context) => OtpPage()),
                             );
+
+                             */
                           },
                           child: Text(
                             'Sign In',
