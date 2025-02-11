@@ -16,14 +16,21 @@ class AuthenticationController {
             if(!verify.status) return res.status(400).json({error: "Account is not active."})
             if(!verify.activation) return res.status(400).json({error: "Account is not verified."})
 
-            if(verify.password !== req.body.password) return res.status(400).json({error: "Incorrect password."})
+            if(verify.password !== req.body.password) {
+                return res.status(400).json({error: "Incorrect password."})
+            }
+            else if(verify.email !== req.body.email)
+            {
+                return res.status(400).json({error: "Email is incorrect."})
+            }
             //Code for Redirection and OTP Generation
             else{
                 UserModel.generateOTP();
+                return res.status(201).json({message: "Generating OTP....", verify})
             }
     
         }catch(error){
-
+            return res.status(500).json({ error: error.message + 'An Error Occurred while Logging in.'});
         }
     }
 
@@ -35,9 +42,11 @@ class AuthenticationController {
 
             if(otp_verify.two_fa_code !== otp) return res.status(301).json({error: "OTP is Incorrect. Please Check Your Email."})
             
-            return 
+            return res.status(200).json({})
         }catch(error){
-
+            return res.status(500).json({ error: error.message + 'Error Has occurred While Authenticating OTP. Please Reload this page.'});
         }
     }
 }
+
+module.exports = AuthenticationController
