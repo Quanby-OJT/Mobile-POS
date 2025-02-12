@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:mobile_pos/screens/admin/main.dart';
 import '../manager/main.dart';
 
 class OtpPage extends StatefulWidget {
@@ -19,91 +20,128 @@ class _OtpPageState extends State<OtpPage> {
         forceMaterialTransparency: false,
       ),
       body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        color: Colors.white,
-        child: Form(
+          width: double.infinity,
+          height: double.infinity,
+          color: Colors.white,
+          child: Form(
             child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset(
-              'assets/images/verification_badge.png',
-              width: 150,
-              height: 150,
-            ),
-            Padding(
-              padding: EdgeInsets.only(top: 10),
-              child: Text(
-                'Verification',
-                style: TextStyle(
-                    fontSize: 40,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black87),
-              ),
-            ),
-            Text(
-              "We've sent you an OTP via Email",
-              style: TextStyle(color: Colors.black26, fontSize: 20),
-            ),
-            Padding(
-              padding: EdgeInsets.only(top: 80, bottom: 30),
-              child: SizedBox(
-                width: 300,
-                child: TextField(
-                  keyboardType: TextInputType.number,
-                  cursorColor: Colors.black,
-                  inputFormatters: <TextInputFormatter>[
-                    FilteringTextInputFormatter.digitsOnly // Allow only digits
-                  ],
-                  decoration: InputDecoration(
-                      hintText: 'Enter OTP...',
-                      hintStyle: TextStyle(color: Colors.black26),
-                      enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.black26),
-                          borderRadius: BorderRadius.circular(10)),
-                      focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.black26),
-                          borderRadius: BorderRadius.circular(10))),
-                ),
-              ),
-            ),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                  minimumSize: Size(300, 60),
-                  backgroundColor: Color(0xFFEAAE16),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10))),
-              onPressed: () {},
-              child: Text(
-                'VERIFY',
-                style:
-                    TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-              ),
-            ),
-            Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
-                  "Didn't receive the OTP?",
-                  style: TextStyle(color: Colors.black26),
+                Image.asset(
+                  'assets/images/verification_badge.png',
+                  width: 150,
+                  height: 150,
                 ),
-                TextButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => MainPage()),
-                    );
-                  },
+                Padding(
+                  padding: EdgeInsets.only(top: 10),
                   child: Text(
-                    'Resend again',
-                    style: TextStyle(color: Colors.blueAccent),
+                    'Verification',
+                    style: TextStyle(
+                        fontSize: 40,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black87),
                   ),
                 ),
+                Text(
+                  "We've sent you an OTP via Email",
+                  style: TextStyle(color: Colors.black26, fontSize: 20),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: 80, bottom: 30),
+                  child: SizedBox(
+                    width: 300,
+                    child: TextField(
+                      keyboardType: TextInputType.number,
+                      cursorColor: Colors.black,
+                      inputFormatters: <TextInputFormatter>[
+                        FilteringTextInputFormatter
+                            .digitsOnly // Allow only digits
+                      ],
+                      decoration: InputDecoration(
+                          hintText: 'Enter OTP...',
+                          hintStyle: TextStyle(color: Colors.black26),
+                          enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.black26),
+                              borderRadius: BorderRadius.circular(10)),
+                          focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.black26),
+                              borderRadius: BorderRadius.circular(10))),
+                    ),
+                  ),
+                ),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      minimumSize: Size(300, 60),
+                      backgroundColor: Color(0xFFEAAE16),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10))),
+                  onPressed: () {},
+                  child: Text(
+                    'VERIFY',
+                    style: TextStyle(
+                        color: Colors.white, fontWeight: FontWeight.bold),
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Didn't receive the OTP?",
+                      style: TextStyle(color: Colors.black26),
+                    ),
+                    TextButton(
+                      onPressed: () {},
+                      child: Text(
+                        'Resend again',
+                        style: TextStyle(color: Colors.blueAccent),
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      margin: EdgeInsets.only(top: 20),
+                      child: ElevatedButton(
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => AdminMainPage()));
+                          },
+                          child: Text(
+                            'Admin Dashboard',
+                            style: TextStyle(
+                                color: const Color.fromARGB(255, 0, 0, 0)),
+                          )),
+                    ),
+                    SizedBox(
+                      width: 20,
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(top: 20),
+                      child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20)),
+                          ),
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => MainPage()));
+                          },
+                          child: Text(
+                            'Manage Dashboard',
+                            style: TextStyle(color: Colors.black),
+                          )),
+                    )
+                  ],
+                )
               ],
-            )
-          ],
-        )),
-      ),
+            ),
+          )),
     );
   }
 }
