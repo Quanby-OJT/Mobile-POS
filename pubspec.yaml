@@ -61,7 +61,7 @@ flutter:
   assets:
     - assets/images/cesarsResto.jpg
     - assets/images/verification_badge.png 
-
+    - assets/images/icons8_horizontal_line_48.png
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
 
