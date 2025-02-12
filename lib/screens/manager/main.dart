@@ -12,7 +12,7 @@ class _MainPageState extends State<MainPage> {
   int _selectedIndex = 0;
 
   final List<Widget> _pages = [
-    Dashboard(),
+    ManagerDashboard(),
     MenuPage(),
     InventoryPage(),
   ];
