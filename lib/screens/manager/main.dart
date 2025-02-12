@@ -4,6 +4,8 @@ import '../manager/dashboard.dart';
 import '../manager/menu.dart';
 
 class MainPage extends StatefulWidget {
+  const MainPage({super.key});
+
   @override
   _MainPageState createState() => _MainPageState();
 }

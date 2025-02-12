@@ -1,8 +1,8 @@
 import 'dart:typed_data';
-
+import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
-import 'dart:io';
+import 'package:file_picker/file_picker.dart';
+import 'package:mobile_pos/services/api_service.dart';
 
 class InventoryPage extends StatefulWidget {
   const InventoryPage({super.key});
@@ -12,121 +12,162 @@ class InventoryPage extends StatefulWidget {
 }
 
 class _InventoryPageState extends State<InventoryPage> {
-  List<Map<String, dynamic>> inventory = [];
-  final ImagePicker _picker = ImagePicker();
+  Uint8List? _imageBytes;
+  String? _imageName;
+  String? _imageUrl;
+  List<dynamic> _products = []; // List to store products
 
-  void _addItem() {
-    String name = '';
-    String quantity = '';
-    String price = '';
-    Uint8List? imageBytes;
+  // Controllers for text fields
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _quantityController = TextEditingController();
+  final TextEditingController _priceController = TextEditingController();
 
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Add Item'),
-          content: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                TextField(
-                  decoration: InputDecoration(labelText: 'Item Name'),
-                  onChanged: (value) => name = value,
-                ),
-                TextField(
-                  decoration: InputDecoration(labelText: 'Quantity'),
-                  keyboardType: TextInputType.number,
-                  onChanged: (value) => quantity = value,
-                ),
-                TextField(
-                  decoration: InputDecoration(labelText: 'Price (\$)'),
-                  keyboardType: TextInputType.number,
-                  onChanged: (value) => price = value,
-                ),
-                SizedBox(height: 10),
-                ElevatedButton(
-                  onPressed: () async {
-                    final pickedFile =
-                        await _picker.pickImage(source: ImageSource.gallery);
-                    if (pickedFile != null) {
-                      final bytes = await pickedFile.readAsBytes();
-                      setState(() {
-                        imageBytes = bytes;
-                      });
-                    }
-                  },
-                  child: Text('Choose Image'),
-                ),
-                imageBytes != null
-                    ? Image.memory(imageBytes!, height: 100)
-                    : Container(),
-              ],
-            ),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: Text('Cancel'),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                setState(() {
-                  inventory.add({
-                    'name': name,
-                    'quantity': int.tryParse(quantity) ?? 0,
-                    'price': double.tryParse(price) ?? 0.0,
-                    'image': imageBytes,
-                  });
-                });
-                Navigator.pop(context);
-              },
-              child: Text('Add'),
-            ),
-          ],
-        );
-      },
+  @override
+  void initState() {
+    super.initState();
+    _loadProducts(); // Fetch products when the page loads
+  }
+
+  Future<void> _loadProducts() async {
+    List<dynamic> products = await ApiService.fetchProducts();
+    setState(() {
+      _products.clear();
+      _products.addAll(products);
+    });
+
+    print("Loaded products: $_products");
+  }
+
+  Future<void> _pickImage() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.image,
     );
+
+    if (result != null) {
+      setState(() {
+        _imageBytes = result.files.first.bytes;
+        _imageName = result.files.first.name;
+      });
+    }
+  }
+
+  Future<void> _storeImage() async {
+    if (_imageBytes == null || _imageName == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Please select an image first!")),
+      );
+      return;
+    }
+
+    // Get values from text fields
+    String name = _nameController.text.trim();
+    String quantity = _quantityController.text.trim();
+    String price = _priceController.text.trim();
+
+    if (name.isEmpty || quantity.isEmpty || price.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Please fill all fields!")),
+      );
+      return;
+    }
+
+    String? response = await ApiService.uploadImage(
+      _imageBytes!,
+      _imageName!,
+      name,
+      quantity,
+      price,
+    );
+
+    if (response != null) {
+      Map<String, dynamic> data = jsonDecode(response);
+      setState(() {
+        _imageUrl = data['imageUrl'];
+      });
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Image uploaded successfully!")),
+      );
+
+      _loadProducts(); // Refresh product list after adding a new product
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Error uploading image!")),
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('Inventory')),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            ElevatedButton(
-              onPressed: _addItem,
-              child: Text('Add Item'),
-            ),
-            SizedBox(height: 16),
-            Expanded(
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: DataTable(
-                  columns: [
-                    DataColumn(label: Text('Image')),
-                    DataColumn(label: Text('Item Name')),
-                    DataColumn(label: Text('Quantity')),
-                    DataColumn(label: Text('Price (\$)')),
-                  ],
-                  rows: inventory.map((item) {
-                    return DataRow(cells: [
-                      DataCell(item['image'] != null
-                          ? Image.memory(item['image'], height: 50, width: 50)
-                          : Icon(Icons.image_not_supported)),
-                      DataCell(Text(item['name'])),
-                      DataCell(Text(item['quantity'].toString())),
-                      DataCell(Text(item['price'].toStringAsFixed(2))),
-                    ]);
-                  }).toList(),
-                ),
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(title: Text('Upload Image with Data')),
+        body: Padding(
+          padding: EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              TextField(
+                controller: _nameController,
+                decoration: InputDecoration(labelText: "Name"),
               ),
-            ),
-          ],
+              SizedBox(height: 10),
+              TextField(
+                controller: _quantityController,
+                decoration: InputDecoration(labelText: "Quantity"),
+                keyboardType: TextInputType.number,
+              ),
+              SizedBox(height: 10),
+              TextField(
+                controller: _priceController,
+                decoration: InputDecoration(labelText: "Price"),
+                keyboardType: TextInputType.number,
+              ),
+              SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: _pickImage,
+                child: Text('Pick Image'),
+              ),
+              SizedBox(height: 10),
+              ElevatedButton(
+                onPressed: _storeImage,
+                child: Text('Store Image'),
+              ),
+              SizedBox(height: 20),
+              _imageBytes != null
+                  ? Image.memory(_imageBytes!, width: 200, height: 200)
+                  : Text('No image selected'),
+              SizedBox(height: 20),
+              _imageUrl != null
+                  ? Image.network(_imageUrl!, width: 200, height: 200)
+                  : Text('No image stored yet'),
+              SizedBox(height: 20),
+              Divider(), // Divider to separate input fields and product list
+              Text(
+                'Product List',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              Expanded(
+                child: _products.isEmpty
+                    ? Center(child: Text("No products found"))
+                    : ListView.builder(
+                        itemCount: _products.length,
+                        itemBuilder: (context, index) {
+                          var product = _products[index];
+                          return ListTile(
+                            leading: product['image_url'] != null
+                                ? Image.network(product['image_url'],
+                                    width: 50, height: 50)
+                                : Icon(Icons.image_not_supported),
+                            title: Text(product['name']),
+                            subtitle: Text(
+                                'Qty: ${product['quantity']} - Price: ${product['price']}'),
+                          );
+                        },
+                      ),
+              ),
+            ],
+          ),
         ),
       ),
     );
