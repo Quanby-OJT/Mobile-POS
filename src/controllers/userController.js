@@ -25,6 +25,8 @@ class UserController {
         }
     }
 
+    
+
     static async getAllUsers(req, res) {
         try {
             const users = await UserModel.getAllUsers(); // Fetch users from Supabase

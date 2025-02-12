@@ -1,9 +1,6 @@
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import '../models/user_model.dart';
-import 'package:flutter/material.dart';
-import 'package:mobile_pos/views/otp_page.dart';
-import 'package:mobile_pos/views/login_page.dart';
 
 class UserService {
   static const String baseUrl = "http://localhost:3000/api/users";
@@ -34,13 +31,11 @@ class UserService {
   }
 
   static Future<void> loginAuthentication(String email, String password) async {
-    final response = await http.post(
-      Uri.parse('$baseUrl/login-authentication'),
-      headers: {"Content-Type": "application/json"},
-      body: jsonEncode({"email": email, "password": password})
-    );
+    final response = await http.post(Uri.parse('$baseUrl/login-authentication'),
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode({"email": email, "password": password}));
 
-    if(response.statusCode == 400){
+    if (response.statusCode == 400) {
       throw Exception(response.body);
     }
   }
