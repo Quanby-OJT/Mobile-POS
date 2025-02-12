@@ -1,15 +1,40 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../manager/main.dart';
+import 'package:mobile_pos/services/user_service.dart';
 
 class OtpPage extends StatefulWidget {
-  const OtpPage({super.key});
+  final String user_id;
+  const OtpPage({super.key, required this.user_id});
 
   @override
   State<OtpPage> createState() => _OtpPageState();
 }
 
 class _OtpPageState extends State<OtpPage> {
+  final TextEditingController otpController = TextEditingController();
+  String message = "";
+
+  Future<bool> otpAuth() async {
+    try {
+      final message = await UserService.otpAuthentication(
+        otpController.text,
+        widget.user_id
+      );
+
+      // If no error is thrown, the login is successful
+      setState(() {
+        this.message = message; // Success message
+      });
+      return true; // Successful login
+    } catch (e) {
+      setState(() {
+        message = e.toString(); // Display the error message
+      });
+      return false; // Login failed
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,6 +75,7 @@ class _OtpPageState extends State<OtpPage> {
               child: SizedBox(
                 width: 300,
                 child: TextField(
+                  controller: otpController,
                   keyboardType: TextInputType.number,
                   cursorColor: Colors.black,
                   inputFormatters: <TextInputFormatter>[
@@ -67,13 +93,34 @@ class _OtpPageState extends State<OtpPage> {
                 ),
               ),
             ),
+            Padding(
+              padding: EdgeInsets.only(left: 50, right: 50),
+              child: Text(message, style: TextStyle(color: Colors.red)),
+            ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                   minimumSize: Size(300, 60),
                   backgroundColor: Color(0xFFEAAE16),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10))),
-              onPressed: () {},
+              onPressed: () async {
+                setState(() {
+                  message = "";
+                });
+
+                bool hasOTPVerified = await otpAuth();
+
+                if(hasOTPVerified){
+                  //Implementation of Role-Based Access Role.
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text("I logged in to the system.")), // Display the error message
+                  );
+                }else{
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text(message)), // Display the error message
+                  );
+                }
+              },
               child: Text(
                 'VERIFY',
                 style:

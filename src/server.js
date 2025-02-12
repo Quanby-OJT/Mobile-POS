@@ -11,7 +11,7 @@ app.use(cors());
 app.use(bodyParser.json());
 
 // API Routes
-app.use("/api/users", userRoutes);
+app.use("/api/users", userRoutes);  
 
 // Start the server
 const PORT = process.env.PORT || 3000;
