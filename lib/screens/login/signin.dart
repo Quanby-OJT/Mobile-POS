@@ -14,21 +14,26 @@ class _SignInPageState extends State<SignInPage> {
   final TextEditingController passwordController = TextEditingController();
   String message = "";
 
-  void loginAuth() async {
-    if (emailController.text.isEmpty || passwordController.text.isEmpty) {
-      setState(() {
-        message = "Please fill in all fields";
-      });
-      return;
-    }
+  Future<bool> loginAuth() async {
     try {
-      await UserService.loginAuthentication(emailController.text, passwordController.text);
-    }catch(e){
+      final message = await UserService.loginAuthentication(
+        emailController.text,
+        passwordController.text,
+      );
+
+      // If no error is thrown, the login is successful
       setState(() {
-        message = "Error: $e";
+        this.message = message; // Success message
       });
+      return true; // Successful login
+    } catch (e) {
+      setState(() {
+        message = e.toString(); // Display the error message
+      });
+      return false; // Login failed
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -77,6 +82,10 @@ class _SignInPageState extends State<SignInPage> {
                       padding: EdgeInsets.only(left: 50, right: 50, top: 30),
                       child: TextFormField(
                         controller: emailController,
+                        validator: (value){
+                          if(value == null || value.isEmpty) return 'Please Enter Your Email First';
+                          return null;
+                        },
                         cursorColor: Colors.black,
                         decoration: InputDecoration(
                             label: Text('Email'),
@@ -98,6 +107,10 @@ class _SignInPageState extends State<SignInPage> {
                       padding: EdgeInsets.only(left: 50, right: 50, top: 20),
                       child: TextFormField(
                         controller: passwordController,
+                        validator: (value){
+                          if(value == null || value.isEmpty) return 'Password Field Cannot be Empty';
+                          return null;
+                        },
                         cursorColor: Colors.black,
                         obscureText: true,
                         obscuringCharacter: '*',
@@ -137,16 +150,19 @@ class _SignInPageState extends State<SignInPage> {
                               backgroundColor: Color(0xFFEAAE16),
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10))),
-                          onPressed: () {
-                            loginAuth;
-                            /*
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => OtpPage()),
-                            );
+                          onPressed: () async {
+                            bool isAuthenticated = await loginAuth();
 
-                             */
+                            if (isAuthenticated) {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => OtpPage()),
+                              );
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text(message)), // Display the error message
+                              );
+                            }
                           },
                           child: Text(
                             'Sign In',

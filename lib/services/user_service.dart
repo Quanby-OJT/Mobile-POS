@@ -4,7 +4,7 @@ import '../models/user_model.dart';
 import 'package:flutter/material.dart';
 
 class UserService {
-  static const String baseUrl = "http://localhost:3000/api/users";
+  static const String baseUrl = "http://10.0.2.2:3000/api/users";
 
   // Fetch all users
   /*
@@ -33,14 +33,36 @@ class UserService {
   }
    */
 
-  static Future<void> loginAuthentication(String email, String password) async {
+  static Future<String> loginAuthentication(String email, String password) async {
+
     final response = await http.post(
       Uri.parse('$baseUrl/login-authentication'),
       headers: {"Content-Type": "application/json"},
       body: jsonEncode({"email": email, "password": password})
     );
+    final data = jsonDecode(response.body);
+
     if(response.statusCode == 400){
-      throw Exception(response.body);
+      throw Exception(data['message']);
+    }else if(response.statusCode == 200) {
+      return data['message'];
     }
+    return "An Error Occured.";
+  }
+
+  static Future<String> otpAuthentication(String otp) async {
+    final response = await http.post(
+        Uri.parse('$baseUrl/login-authentication'),
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode({"otp": otp})
+    );
+    final data = jsonDecode(response.body);
+
+    if(response.statusCode == 400){
+      throw Exception(data['message']);
+    }else if(response.statusCode == 200) {
+      return data['message'];
+    }
+    return "An Error Occured.";
   }
 }
