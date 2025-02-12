@@ -2,7 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:mobile_pos/screens/admin/viewItems/view_order.dart';
 
-class Order extends StatelessWidget {
+class Order extends StatefulWidget {
+  @override
+  _OrderState createState() => _OrderState();
+}
+
+class _OrderState extends State<Order> {
+  String numberSet = '20';
+  int currentPage = 1;
+  final int totalPages = 5;
+
+  void _nextPage(int page) {
+    setState(() {
+      currentPage = page;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final List<Map<String, dynamic>> products = [
@@ -63,8 +78,7 @@ class Order extends StatelessWidget {
                     builder: (context, constraints) {
                       double columnWidth = constraints.maxWidth / 7;
 
-                      return SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
+                      return Center(
                         child: DataTable(
                           columnSpacing: 0,
                           headingRowHeight: 40,
@@ -73,43 +87,148 @@ class Order extends StatelessWidget {
                             DataColumn(
                               label: SizedBox(
                                 width: columnWidth,
-                                child: Center(child: Text('Orders')),
+                                child: Center(
+                                    child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Center(
+                                      child: Text('Order ID'),
+                                    ),
+                                    IconButton(
+                                        onPressed: () {},
+                                        icon: Icon(
+                                          Icons.unfold_more,
+                                          color: Colors.black,
+                                          size: 15,
+                                        ))
+                                  ],
+                                )),
                               ),
                             ),
                             DataColumn(
                               label: SizedBox(
                                 width: columnWidth,
-                                child: Center(child: Text('Type')),
+                                child: Center(
+                                    child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Center(
+                                      child: Text('Type'),
+                                    ),
+                                    IconButton(
+                                        onPressed: () {},
+                                        icon: Icon(
+                                          Icons.unfold_more,
+                                          color: Colors.black,
+                                          size: 15,
+                                        ))
+                                  ],
+                                )),
                               ),
                             ),
                             DataColumn(
                               label: SizedBox(
                                 width: columnWidth,
-                                child: Center(child: Text('Status')),
+                                child: Center(
+                                    child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Center(
+                                      child: Text('Status '),
+                                    ),
+                                    IconButton(
+                                        onPressed: () {},
+                                        icon: Icon(
+                                          Icons.unfold_more,
+                                          color: Colors.black,
+                                          size: 15,
+                                        ))
+                                  ],
+                                )),
                               ),
                             ),
                             DataColumn(
                               label: SizedBox(
                                 width: columnWidth,
-                                child: Center(child: Text('Product')),
+                                child: Center(
+                                    child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Center(
+                                      child: Text('Product'),
+                                    ),
+                                    IconButton(
+                                        onPressed: () {},
+                                        icon: Icon(
+                                          Icons.unfold_more,
+                                          color: Colors.black,
+                                          size: 15,
+                                        ))
+                                  ],
+                                )),
                               ),
                             ),
                             DataColumn(
                               label: SizedBox(
                                 width: columnWidth,
-                                child: Center(child: Text('Total')),
+                                child: Center(
+                                    child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Center(
+                                      child: Text('Total'),
+                                    ),
+                                    IconButton(
+                                        onPressed: () {},
+                                        icon: Icon(
+                                          Icons.unfold_more,
+                                          color: Colors.black,
+                                          size: 15,
+                                        ))
+                                  ],
+                                )),
                               ),
                             ),
                             DataColumn(
                               label: SizedBox(
                                 width: columnWidth,
-                                child: Center(child: Text('Date')),
+                                child: Center(
+                                    child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Center(
+                                      child: Text('Date'),
+                                    ),
+                                    IconButton(
+                                        onPressed: () {},
+                                        icon: Icon(
+                                          Icons.unfold_more,
+                                          color: Colors.black,
+                                          size: 15,
+                                        ))
+                                  ],
+                                )),
                               ),
                             ),
                             DataColumn(
                               label: SizedBox(
                                 width: columnWidth,
-                                child: Center(child: Text('Action')),
+                                child: Center(
+                                    child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Center(
+                                      child: Text('Action'),
+                                    ),
+                                    IconButton(
+                                        onPressed: () {},
+                                        icon: Icon(
+                                          Icons.unfold_more,
+                                          color: Colors.black,
+                                          size: 15,
+                                        ))
+                                  ],
+                                )),
                               ),
                             ),
                           ],
@@ -227,11 +346,115 @@ class Order extends StatelessWidget {
                 ],
               ),
               SizedBox(height: 16),
-              dataTablesOrders()
+              dataTablesOrders(),
+              Divider(),
+              SizedBox(
+                height: 20,
+              ),
+              resultControl()
             ],
           ),
         ),
       ),
     );
+  }
+
+  Widget resultControl() {
+    return Container(
+        child: Padding(
+      padding: EdgeInsets.symmetric(horizontal: 20),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          SizedBox(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Text('Showing'),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 5),
+                  child: PopupMenuButton<String>(
+                    elevation: 8,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    onSelected: (String value) {
+                      setState(() {
+                        numberSet = value;
+                      });
+                    },
+                    itemBuilder: (BuildContext context) => [
+                      PopupMenuItem(value: '20', child: Text('20')),
+                      PopupMenuItem(value: '30', child: Text('30')),
+                      PopupMenuItem(value: '50', child: Text('50')),
+                    ],
+                    child: Container(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                      decoration: BoxDecoration(
+                        color: Color.fromARGB(255, 222, 222, 222),
+                        borderRadius: BorderRadius.circular(8),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black26,
+                            blurRadius: 4,
+                            offset: Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(numberSet),
+                          Icon(Icons.arrow_drop_down, color: Colors.black),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                Text('of 123'),
+              ],
+            ),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              IconButton(
+                icon: Icon(Icons.arrow_back_ios, size: 16),
+                onPressed:
+                    currentPage > 1 ? () => _nextPage(currentPage - 1) : null,
+              ),
+              for (int i = 1; i <= totalPages; i++)
+                GestureDetector(
+                  onTap: () => _nextPage(i),
+                  child: Container(
+                    margin: EdgeInsets.symmetric(horizontal: 4),
+                    padding: EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: currentPage == i
+                          ? Colors.blue[100]
+                          : Colors.transparent,
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    child: Text(
+                      i.toString(),
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: currentPage == i ? Colors.blue : Colors.black,
+                      ),
+                    ),
+                  ),
+                ),
+              IconButton(
+                icon: Icon(Icons.arrow_forward_ios, size: 16),
+                onPressed: currentPage < totalPages
+                    ? () => _nextPage(currentPage + 1)
+                    : null,
+              ),
+            ],
+          )
+        ],
+      ),
+    ));
   }
 }

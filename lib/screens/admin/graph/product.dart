@@ -53,7 +53,7 @@ class ProductStatus extends StatelessWidget {
                           BarChartRodData(
                             toY: product['count'].toDouble(),
                             color: product['count'] == maxCount
-                                ? Colors.red // Highlight the highest product
+                                ? Colors.red
                                 : Colors.blue,
                             width: 25,
                             borderRadius: BorderRadius.circular(4),
@@ -68,7 +68,7 @@ class ProductStatus extends StatelessWidget {
                           showTitles: true,
                           getTitlesWidget: (double value, TitleMeta meta) {
                             return Padding(
-                              padding: const EdgeInsets.only(top: 8.0),
+                              padding: const EdgeInsets.only(top: 5),
                               child: Text(
                                 products[value.toInt()]['name'],
                                 style: TextStyle(fontSize: 10),
@@ -92,7 +92,7 @@ class ProductStatus extends StatelessWidget {
                       touchTooltipData: BarTouchTooltipData(
                         getTooltipItem: (group, groupIndex, rod, rodIndex) {
                           return BarTooltipItem(
-                            '${products[group.x]['name']}\nCount: ${rod.toY.toInt()}',
+                            '${rod.toY.toInt()}',
                             TextStyle(color: Colors.white),
                           );
                         },
