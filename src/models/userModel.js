@@ -92,10 +92,10 @@ class UserModel {
     }
 
 
-    static async resetOTPAuth()
+    static async resetOTPAuth(user_id)
     {
-        const { data, error } = await supabase.from('two_fa_code').insert([{ two_fa_code: null, two_fa_code_expires_at: null }]);
-        console.log({ data, error }); // Log the response for debugging
+        const { data, error } = await supabase.from('two_fa_code').update([{ two_fa_code: null, two_fa_code_expires_at: null }]).eq('user_id', user_id);
+        //console.log({ data, error }); // Log the response for debugging
         if (error) throw new Error(error.message);
     }
 }

@@ -85,10 +85,13 @@ class AuthenticationController {
             console.log(otp_verify  )
 
             if(otp_verify.two_fa_code !== otp) return res.status(400).json({message: "OTP is Incorrect. Please Check Your Email."})
-            if(new Date(otp_verify.two_fa_code_expires_at).getTime() <= Date.now()) return res.status(400).json({message: "OTP Verification Expired. Please Login again."})
-
-                
+            if(new Date(otp_verify.two_fa_code_expires_at).getTime() <= Date.now())
+            { 
+                await UserModel.resetOTPAuth(user_id)
+                return res.status(400).json({message: "OTP Verification Expired. Please Login again."})
+            }
             
+            await UserModel.resetOTPAuth(user_id)
             return res.status(200).json({message: "Successfully Verified OTP."})
         }catch(error){
             console.error(error)
