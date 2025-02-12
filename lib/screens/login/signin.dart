@@ -14,23 +14,27 @@ class _SignInPageState extends State<SignInPage> {
   final TextEditingController passwordController = TextEditingController();
   String message = "";
 
-  Future<bool> loginAuth() async {
+  Future<dynamic> loginAuth() async {
     try {
-      final message = await UserService.loginAuthentication(
+      final response = await UserService.loginAuthentication(
         emailController.text,
         passwordController.text,
       );
 
-      // If no error is thrown, the login is successful
+      // If the login is successful, extract user_id
+      final userId = response['user_id'];
+
       setState(() {
-        this.message = message; // Success message
+        message = response['message']; // Display the success message
       });
-      return true; // Successful login
+
+      return userId.toString(); // Return user_id for successful login
     } catch (e) {
       setState(() {
-        message = e.toString(); // Display the error message
+        message = e.toString().replaceAll('Exception: ', ''); // Clean up error message
       });
-      return false; // Login failed
+
+      return null; // Indicate login failure
     }
   }
 
@@ -152,19 +156,24 @@ class _SignInPageState extends State<SignInPage> {
                                   borderRadius: BorderRadius.circular(10))),
                           onPressed: () async {
                             setState(() {
-                              message = "";
+                              message = ""; // Clear any previous message
                             });
 
-                            bool isAuthenticated = await loginAuth();
+                            String userId = await loginAuth();
+                            print(userId);
 
-                            if (isAuthenticated) {
+                            if (userId != 0) {
+                              // Successful login, navigate to OTP page
                               Navigator.push(
                                 context,
-                                MaterialPageRoute(builder: (context) => OtpPage()),
+                                MaterialPageRoute(
+                                  builder: (context) => OtpPage(user_id: userId.toString()),
+                                ),
                               );
                             } else {
+                              // Display the error message (already set by loginAuth)
                               ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(content: Text(message)), // Display the error message
+                                SnackBar(content: Text(message)), // Show the error as a snack bar
                               );
                             }
                           },
