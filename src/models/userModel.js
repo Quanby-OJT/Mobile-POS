@@ -14,11 +14,13 @@ class UserModel {
     //}
 
     static async attemptLoginAuth(email) {
-        console.log(email)
+        //console.log(email)
         const { data, error } = await supabase
             .from('users')
-            .select('email', 'activation', 'password', 'status')
+            .select('user_id, email, activation, password, status')
             .eq('email', email);
+
+        //console.log({ data, error }); // Log the response for debugging
     
         if (error) {
             throw new Error(error.message || "An unknown database error occurred."); // Handle missing message
@@ -31,7 +33,7 @@ class UserModel {
     }
     
     
-    static async generateOTP()
+    static async generateOTP(user_id)
     {
         let otp = Math.floor(100000 + Math.random() * 900000);
         Date.prototype.addMins = function(m) {
@@ -39,16 +41,25 @@ class UserModel {
             return this
         }
         let timestamp = new Date()
-        const { data, error } = await supabase.from('two_fa_code').insert([{ two_fa_code: otp, two_fa_code_expires: timestamp.addMins(2) }]);
-        if (error) throw new Error(error);
+        const { data, error } = await supabase.from('two_fa_code').insert([{ user_id: user_id, two_fa_code: otp, two_fa_code_expires_at: timestamp.addMins(3) }]);
+        if (error) throw new Error(error.message);
+
         return {otp, data};
     }
 
     static async attemptOTPAuth(code)
     {
         const { data, error } = await supabase.from('two_fa_code').select('two_fa_code').eq('two_fa_code', code);
-        if (error) throw new Error(error);
+        console.log({ data, error }); // Log the response for debugging
+        if (error) throw new Error(error.message);
         return data;
+    }
+
+    static async resetOTPAuth()
+    {
+        const { data, error } = await supabase.from('two_fa_code').insert([{ two_fa_code: null, two_fa_code_expires_at: null }]);
+        console.log({ data, error }); // Log the response for debugging
+        if (error) throw new Error(error.message);
     }
 }
 

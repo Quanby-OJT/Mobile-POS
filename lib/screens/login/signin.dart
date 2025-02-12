@@ -151,6 +151,10 @@ class _SignInPageState extends State<SignInPage> {
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10))),
                           onPressed: () async {
+                            setState(() {
+                              message = "";
+                            });
+
                             bool isAuthenticated = await loginAuth();
 
                             if (isAuthenticated) {

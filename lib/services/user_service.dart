@@ -52,7 +52,7 @@ class UserService {
 
   static Future<String> otpAuthentication(String otp) async {
     final response = await http.post(
-        Uri.parse('$baseUrl/login-authentication'),
+        Uri.parse('$baseUrl/otp-authentication'),
         headers: {"Content-Type": "application/json"},
         body: jsonEncode({"otp": otp})
     );

@@ -1,5 +1,6 @@
-const UserModel = require('../models/userModel');
-const mailer = require('../config/mailtrapClient');
+const UserModel = require('../models/userModel')
+const mailer = require('../config/mailtrapClient')
+const bcrypt = require('bcrypt')
 
 class AuthenticationController {
     static async loginAuthentication(req, res) {
@@ -16,24 +17,36 @@ class AuthenticationController {
     
             // Main Authentication
             const verify = await UserModel.attemptLoginAuth(email);
-            console.log(verify)
 
             if(!verify.email) return res.status(400).json({message: verify.toString()})
     
-            if (verify.status) {
-                return res.status(400).json({ message: "Account is not active." });
+            //if (!verify.status) {
+            //    return res.status(400).json({ message: "Account is not active." });
+            //}
+            //if (!verify.activation) {
+            //    return res.status(400).json({ message: "Account is not verified." });
+            //}  
+
+            //console.log(await bcrypt.compare(password, verify.password));
+
+            if (await !bcrypt.compare(password, verify.password)){
+                return res.status(400).json({ message: 'Incorrect Password. Please Try Again.' });
             }
-            if (verify.activation) {
-                return res.status(400).json({ message: "Account is not verified." });
-            }           
-    
-            if (verify.password !== password) {
-                return res.status(400).json({ message: "Incorrect password." });
-            }
-    
             // Code for Redirection and OTP Generation
-            const otpResult = generateOTP()
+            const otpResult = await UserModel.generateOTP(verify.user_id)
             console.log(otpResult.otp); // Log the OTP for debugging purposes
+
+            const message = "To access the application, you need to enter the following OTP: " + otpResult.otp + ". Once you are logged in, please delete this email to prevent unauthorized access to your account. \n NOTE: The generated OTP will be only valid at maximum of 3 minutes."
+
+            const mailOptions = {
+                from: process.env.SENDER_EMAIL,
+                to: `${email}`,
+                subject: "Your Login OTP Authentication",
+                text: message
+            }
+
+            const info = await mailer.sendMail(mailOptions);
+            console.log('Email Sent: ', info.response);
     
             return res.status(200).json({ message: "Generating OTP....", verify });
     
@@ -44,7 +57,21 @@ class AuthenticationController {
     }
 
     static async generateOTP () {
-        return await userModel.generateOTP();
+        console.log('Hi')
+        // Code for Redirection and OTP Generation
+        const otpResult = await UserModel.generateOTP(verify.user_id)
+        console.log(otpResult.otp); // Log the OTP for debugging purposes
+        const message = "To access the application, you need to enter the following OTP: " + otpResult.otp + ". Once you are logged in, please delete this email to prevent unauthorized access to your account. \n NOTE: The generated OTP will be only valid at maximum of 3 minutes."
+        const mailOptions = {
+            from: process.env.SENDER_EMAIL,
+            to: `${email}`,
+            subject: "Your Login OTP Authentication",
+            text: message
+        }
+        const info = await mailer.sendMail(mailOptions);
+        console.log('Email Sent: ', info.response);
+
+        return res.status(200).json({ message: "Generating OTP....", verify });
     }
     
 
@@ -57,8 +84,8 @@ class AuthenticationController {
 
             const otp_verify = await UserModel.attemptOTPAuth(email)
 
-            if(otp_verify.two_fa_code !== otp) return res.status(301).json({error: "OTP is Incorrect. Please Check Your Email."})
-            if(otp_verify.two_fa_code_expires === Date.now()) return res.status(301).json({error: "OTP Verification Expired. Please Login again."})
+            if(otp_verify.two_fa_code !== otp) return res.status(400).json({error: "OTP is Incorrect. Please Check Your Email."})
+            if(otp_verify.two_fa_code_expires === Date.now()) return res.status(400).json({error: "OTP Verification Expired. Please Login again."})
             
             return res.status(200).json({message: "Successfully Verified OTP."})
         }catch(error){
