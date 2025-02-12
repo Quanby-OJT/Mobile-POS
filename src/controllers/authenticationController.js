@@ -7,7 +7,7 @@ class AuthenticationController {
         try {
             const { email, password } = req.body;
             console.log({ email, password });
-    
+
             // Validation Processing
             if (!email || !password) {
                 return res.status(400).json({ message: "Email and/or password cannot be empty." });
@@ -15,18 +15,18 @@ class AuthenticationController {
             if (!email.includes('@')) {
                 return res.status(400).json({ message: 'Invalid email format, must have "@"' });
             }
-    
+
             // Main Authentication
             const verify = await UserModel.attemptLoginAuth(email);
 
             if(!verify.email) return res.status(400).json({message: verify.toString()})
-    
+
             //if (!verify.status) {
             //    return res.status(400).json({ message: "Account is not active." });
             //}
             //if (!verify.activation) {
             //    return res.status(400).json({ message: "Account is not verified." });
-            //} 
+            //}
 
             if (!(await bcrypt.compare(password, verify.password))){
                 return res.status(400).json({ message: 'Incorrect Password. Please Try Again.' });
@@ -46,9 +46,9 @@ class AuthenticationController {
 
             const info = await mailer.sendMail(mailOptions);
             console.log('Email Sent: ', info.response);
-    
+
             return res.status(200).json({ user_id: verify.user_id, message: "Generating OTP..." });
-    
+
         } catch (error) {
             console.error(error); // Log the error for debugging
             return res.status(500).json({ error: error.message || "An error occurred during login." });
@@ -72,7 +72,7 @@ class AuthenticationController {
 
         return res.status(200).json({ message: "Generating OTP....", verify });
     }
-    
+
 
     static async otpAuthentication(req, res) {
         try{
@@ -84,11 +84,10 @@ class AuthenticationController {
             const otp_verify = await UserModel.attemptOTPAuth(user_id)
             console.log(otp_verify  )
 
-            if(otp_verify.two_fa_code !== otp) return res.status(400).json({message: "OTP is Incorrect. Please Check Your Email."})
-            if(new Date(otp_verify.two_fa_code_expires_at).getTime() <= Date.now())
-            { 
-                await UserModel.resetOTPAuth(user_id)
-                return res.status(400).json({message: "OTP Verification Expired. Please Login again."})
+            if(otp_verify.two_fa_code !== otp) return res.status(301).json({error: "OTP is Incorrect. Please Check Your Email."})
+            if(new Date(otp_verify.two_fa_code_expires_at).getTime() <= Date.now()){
+                await UserModel.resetOtp(user_id)
+                return res.status(301).json({error: "OTP Verification Expired. Please Login again."})
             }
             
             await UserModel.resetOTPAuth(user_id)
