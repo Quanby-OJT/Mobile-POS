@@ -1,0 +1,4 @@
+.env
+.metadata
+/amdroid/.gitignore
+/build/
