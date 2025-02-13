@@ -109,12 +109,12 @@ class _MenuPageState extends State<MenuPage> {
                     decoration: BoxDecoration(
                       color: selectedIndex == index
                           ? Colors.white
-                          : Color(0xFFEAAE16),
+                          : Color(0xFFC19435),
                       borderRadius: BorderRadius.circular(12.0),
                       border: Border.all(
                           color: selectedIndex == index
                               ? Colors.white
-                              : Color(0xFFEAAE16)),
+                              : Color(0xFFC19435)),
                       boxShadow: selectedIndex == index
                           ? [
                               BoxShadow(
@@ -170,17 +170,163 @@ class _MenuPageState extends State<MenuPage> {
     return Container(
       margin: const EdgeInsets.only(top: 20),
       decoration: const BoxDecoration(
-        color: Color(0xFFEAAE16),
+        color: Color(0xFFC19435),
         borderRadius: BorderRadius.only(topLeft: Radius.circular(30)),
       ),
-      child: const Padding(
+      child: Padding(
         padding: EdgeInsets.all(20.0),
         child: Align(
           alignment: Alignment.topLeft,
-          child: Text(
-            'Order/s',
-            style: TextStyle(
-                fontWeight: FontWeight.bold, fontSize: 20, color: Colors.white),
+          child: Column(
+            children: [
+              Expanded(
+                child: Text(
+                  'Order/s',
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: 20, color: Colors.white),
+                ),
+              ),
+              Container(
+                height: 250,
+                width: double.infinity,
+                padding: EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: Color(0xFFFFFFF0),
+                  borderRadius: BorderRadius.circular(20)
+                ),
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        Text(
+                          'Sub Total:',
+                          style: TextStyle(
+                            color: Colors.black45
+                          ),
+                        ),
+                        Spacer(),
+                        Text(
+                          "\$12.00",
+                          style: TextStyle(
+                            color: Colors.black45,
+                            
+                          ),
+                        )
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Text(
+                          'Tax:',
+                          style: TextStyle(
+                            color: Colors.black45
+                          ),
+                        ),
+                        Spacer(),
+                        Text(
+                          "\$2.00",
+                          style: TextStyle(
+                            color: Colors.black45,
+                           
+                          ),
+                        )
+                      ],
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(top: 20, bottom: 10),
+                      child: Row(
+                        children: [
+                          Container(
+                            width: 150,
+                            child: TextFormField(
+                              cursorColor: Colors.black,
+                              decoration: InputDecoration(
+                                fillColor: Colors.white,
+                                filled: true,
+                                hintText: 'Enter amount...',
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Colors.grey
+                                  ),
+                                  borderRadius: BorderRadius.circular(10)
+                                )
+                              ),
+                            ),
+                          ),
+                          Spacer(),
+                          TextButton(
+                            
+                            style: TextButton.styleFrom(
+                              minimumSize: Size(50, 50),
+                              backgroundColor: Colors.green,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10)
+                              ) // Set width and height
+                            ),
+                            onPressed: () {
+                      
+                            }, 
+                            child: Text(
+                              'Change',
+                            
+                              style: TextStyle(
+                                color: Colors.white,
+                                backgroundColor: Colors.green
+                              ),
+                            )
+                            )
+                        ],
+                      ),
+                    ),
+                    Row(
+                      children: [
+                        Text(
+                          'Change:',
+                          style: TextStyle(
+                            color: Colors.black45
+                          ),
+                        ),
+                        Spacer(),
+                        Text(
+                          "\$2.00",
+                          style: TextStyle(
+                            color: Colors.black45,
+                            
+                          ),
+                        )
+                      ],
+                    ),
+                    Spacer(),
+                    Align(
+                      alignment: Alignment.bottomCenter,
+                      child: SizedBox(
+                        width: double.infinity,
+                        height: 50,
+                        child: ElevatedButton(
+                          
+                          style: ElevatedButton.styleFrom(
+                            maximumSize: Size(double.infinity, 50),
+                            backgroundColor: Color(0xFFC19435),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                          onPressed: () {
+                        
+                          }, 
+                          child: Text(
+                            'Charge',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold
+                            ),
+                          )),
+                      ),
+                    ),
+                  ],
+                ),
+              )
+            ],
           ),
         ),
       ),
@@ -191,7 +337,7 @@ class _MenuPageState extends State<MenuPage> {
     return Container(
       margin: const EdgeInsets.only(top: 20),
       decoration: const BoxDecoration(
-        color: Color(0xFFEAAE16),
+        color: Color(0xFFC19435),
         borderRadius: BorderRadius.only(
             topLeft: Radius.circular(30), topRight: Radius.circular(30)),
       ),
@@ -214,7 +360,7 @@ class _MenuPageState extends State<MenuPage> {
       duration: const Duration(milliseconds: 300),
       height: isExpanded ? 500 : 300, // Toggle height
       decoration: const BoxDecoration(
-        color: Color(0xFFEAAE16),
+        color: Color(0xFFC19435),
         borderRadius: BorderRadius.only(
             topLeft: Radius.circular(30), topRight: Radius.circular(30)),
       ),
@@ -223,7 +369,7 @@ class _MenuPageState extends State<MenuPage> {
           // Drag Handle (Like a Bottom Sheet)
           ElevatedButton(
               style: ElevatedButton.styleFrom(
-                  backgroundColor: Color(0xFFEAAE16), elevation: 0),
+                  backgroundColor: Color(0xFFC19435), elevation: 0),
               onPressed: () {
                 setState(() {
                   isExpanded = !isExpanded; // Toggle height
