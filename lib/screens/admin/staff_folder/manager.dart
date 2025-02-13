@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-class Status extends StatefulWidget {
-  const Status({super.key});
+class buildManagerTable extends StatefulWidget {
+  const buildManagerTable({super.key});
 
   @override
-  State<Status> createState() => _buildStatusState();
+  State<buildManagerTable> createState() => _buildManagerTableState();
 }
 
 class Manager {
@@ -23,7 +23,7 @@ class Manager {
   });
 }
 
-class _buildStatusState extends State<Status>
+class _buildManagerTableState extends State<buildManagerTable>
     with SingleTickerProviderStateMixin {
   String numberSet = '20';
   int currentPage = 1;
@@ -287,7 +287,20 @@ class _buildStatusState extends State<Status>
                                 foregroundColor: Colors.white,
                               ),
                             ),
-                          )
+                          ),
+                          const SizedBox(width: 20),
+                          ElevatedButton.icon(
+                            onPressed: () => _onAddPressed(context),
+                            icon: const Icon(Icons.add),
+                            label: const Text("Add"),
+                            style: ElevatedButton.styleFrom(
+                              minimumSize: Size(100, 55),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10)),
+                              backgroundColor: Colors.blue,
+                              foregroundColor: Colors.white,
+                            ),
+                          ),
                         ],
                       ),
                     ],
