@@ -1,16 +1,13 @@
 const supabase = require('../config/supabaseClient');
 
 class UserModel {
-    //const password = "password";
-    //const email = "test@test.com"
-    //const activation = 1
-    //const status = 0
       static async attemptLoginAuth(email) {
         //console.log(email)
         const { data, error } = await supabase
-            .from('users')
+            .from('user')
             .select('user_id, email, activation, password, status')
-            .eq('email', email);
+            .eq('email', email)
+            .single();
 
         //console.log({ data, error }); // Log the response for debugging
     
@@ -20,8 +17,8 @@ class UserModel {
         if (!data || data.length === 0) {
             return "This email is not registered to our system. Please ask the admin for assistance."; // Handle the case where no user is found
         }
-    
-        return data[0]; // Return the first matched user (assuming emails are unique)
+
+        return data;
       }
     
     
@@ -104,7 +101,7 @@ class UserModel {
 
     static async userSession(user_id)
     {
-        const {data, error} = await supabase.from('users').select('roles (role_id, user_roles)').eq('user_id')
+        const {data, error} = await supabase.from('users').select('roles (role_id, user_roles)').eq('user_id', user_id)
         //console.log({ data, error }); // Log the response for debugging
         if (error) throw new Error(error.message)
         return data;

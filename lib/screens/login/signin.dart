@@ -22,14 +22,23 @@ class _SignInPageState extends State<SignInPage> {
         passwordController.text,
       );
 
-      // If the login is successful, extract user_id
-      final userId = response['user_id'];
+      if(response['user_id'] != null){
+        // If the login is successful, extract user_id
+        final userId = response['user_id'];
+        print(userId);
 
-      setState(() {
-        message = response['message']; // Display the success message
-      });
+        setState(() {
+          message = response['message']; // Display the success message
+        });
 
-      return userId.toString(); // Return user_id for successful login
+        return userId.toString();
+      }else if(response['error'] != null){
+        setState(() {
+          message = response['error'];
+        });
+
+        return null;
+      }
     } catch (e) {
       setState(() {
         message = e.toString().replaceAll('Exception: ', ''); // Clean up error message
@@ -87,10 +96,6 @@ class _SignInPageState extends State<SignInPage> {
                       padding: EdgeInsets.only(left: 50, right: 50, top: 30),
                       child: TextFormField(
                         controller: emailController,
-                        validator: (value){
-                          if(value == null || value.isEmpty) return 'Please Enter Your Email First';
-                          return null;
-                        },
                         cursorColor: Colors.black,
                         decoration: InputDecoration(
                             label: Text('Email'),
@@ -112,10 +117,6 @@ class _SignInPageState extends State<SignInPage> {
                       padding: EdgeInsets.only(left: 50, right: 50, top: 20),
                       child: TextFormField(
                         controller: passwordController,
-                        validator: (value){
-                          if(value == null || value.isEmpty) return 'Password Field Cannot be Empty';
-                          return null;
-                        },
                         cursorColor: Colors.black,
                         obscureText: true,
                         obscuringCharacter: '*',
@@ -163,12 +164,12 @@ class _SignInPageState extends State<SignInPage> {
 
                             String userId = await loginAuth();
 
-                            if (userId != 0) {
+                            if (userId != null) {
                               // Successful login, navigate to OTP page
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => OtpPage(user_id: userId.toString()),
+                                  builder: (context) => OtpPage(user_id: userId),
                                 ),
                               );
                             } else {
