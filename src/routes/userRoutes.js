@@ -11,4 +11,6 @@ router.get('/all-users', UserController.getAllUsers);
 router.post('/login-authentication', AuthenticationController.loginAuthentication)
 router.post('/otp-authentication', AuthenticationController.otpAuthentication)
 
+
+
 module.exports = router;

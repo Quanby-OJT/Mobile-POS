@@ -69,7 +69,7 @@ class _OtpPageState extends State<OtpPage> {
             ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-                  minimumSize: Size(300, 60),
+                  minimumSize: Size(300, 50),
                   backgroundColor: Color(0xFFEAAE16),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10))),

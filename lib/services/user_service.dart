@@ -33,6 +33,7 @@ class UserService {
     }
   }
 
+
   static Future<void> loginAuthentication(String email, String password) async {
     final response = await http.post(
       Uri.parse('$baseUrl/login-authentication'),
@@ -44,4 +45,25 @@ class UserService {
       throw Exception(response.body);
     }
   }
+
+  // Add user account with full details
+  static Future<void> addAccount(
+      String firstname, String lastname, String email, String password, String role) async {
+    final response = await http.post(
+      Uri.parse('$baseUrl/add-account'),
+      headers: {"Content-Type": "application/json"},
+      body: jsonEncode({
+        "firstname": firstname,
+        "lastname": lastname,
+        "email": email,
+        "password": password,
+        "role": role
+      }),
+    );
+
+    if (response.statusCode != 201) {
+      throw Exception("Failed to add account: ${response.body}");
+    }
+  }
+  
 }
