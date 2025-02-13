@@ -44,6 +44,7 @@ dependencies:
   data_table_2: ^2.0.3
   file: ^7.0.0
   platform: ^3.1.0
+  dropdown_textfield: ^1.2.0
 
 dev_dependencies:
   flutter_test:
