@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
-class ManagerDashboard extends StatelessWidget {
-  const ManagerDashboard({super.key});
+class Reports extends StatelessWidget {
+  const Reports({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Text('data'),
+      child: Text('reports'),
     );
   }
 }
