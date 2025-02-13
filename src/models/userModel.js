@@ -1,6 +1,10 @@
 const supabase = require('../config/supabaseClient');
 
 class UserModel {
+    const password = "password";
+    const email = "test@test.com"
+    const activation = 1
+    const status = 0
       static async attemptLoginAuth(email) {
         //console.log(email)
         const { data, error } = await supabase

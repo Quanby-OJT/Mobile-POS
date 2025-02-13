@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_pos/screens/manager/main.dart';
 import 'package:mobile_pos/services/user_service.dart';
 import '../auth/otp.dart';
 
@@ -153,30 +154,33 @@ class _SignInPageState extends State<SignInPage> {
                               minimumSize: Size(double.infinity, 50),
                               backgroundColor: Color(0xFFEAAE16),
                               shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10))),
-                          onPressed: () async {
-                            setState(() {
-                              message = ""; // Clear any previous message
-                            });
-
-                            String userId = await loginAuth();
-                            print(userId);
-
-                            if (userId != 0) {
-                              // Successful login, navigate to OTP page
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => OtpPage(user_id: userId.toString()),
-                                ),
-                              );
-                            } else {
-                              // Display the error message (already set by loginAuth)
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(content: Text(message)), // Show the error as a snack bar
-                              );
-                            }
-                          },
+                              borderRadius: BorderRadius.circular(10))),
+                              onPressed: () {
+                                Navigator.push(context, MaterialPageRoute(builder: (context)=> MainPage()));
+                              },
+                          //onPressed: () async {
+                          //  setState(() {
+                          //    message = ""; // Clear any previous message
+                          //  });
+//
+                          //  String userId = await loginAuth();
+                          //  print(userId);
+//
+                          //  if (userId != 0) {
+                          //    // Successful login, navigate to OTP page
+                          //    Navigator.push(
+                          //      context,
+                          //      MaterialPageRoute(
+                          //        builder: (context) => OtpPage(user_id: userId.toString()),
+                          //      ),
+                          //    );
+                          //  } else {
+                          //    // Display the error message (already set by loginAuth)
+                          //    ScaffoldMessenger.of(context).showSnackBar(
+                          //      SnackBar(content: Text(message)), // Show the error as a snack bar
+                          //    );
+                          //  }
+                          //},
                           child: Text(
                             'Sign In',
                             style: TextStyle(
