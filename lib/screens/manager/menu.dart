@@ -33,14 +33,16 @@ class _MenuPageState extends State<MenuPage> {
           return isTablet
               ? Row(
                   children: [
-                    Expanded( child: buildMenuSection(isTablet)),
-                    Container(width: 300, child: buildOrderSection()),
+                    Expanded(child: buildMenuSection(isTablet)),
+                    SizedBox(width: 300, child: buildOrderSection()),
                   ],
                 )
               : Column(
                   children: [
                     Expanded(child: buildMenuSection(isTablet)),
-                    Container( child: buildOrderSectionColumn()), // Fixed height for orders on mobile
+                    Container(
+                        child:
+                            buildOrderSectionColumn()), // Fixed height for orders on mobile
                   ],
                 );
         },
@@ -57,7 +59,10 @@ class _MenuPageState extends State<MenuPage> {
             children: [
               const Text(
                 'Order Menu',
-                style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Colors.black87),
+                style: TextStyle(
+                    fontSize: 30,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black87),
               ),
               const Spacer(),
               SizedBox(
@@ -99,23 +104,42 @@ class _MenuPageState extends State<MenuPage> {
                     duration: const Duration(milliseconds: 300),
                     height: isTablet ? 100 : 80,
                     margin: const EdgeInsets.symmetric(horizontal: 8.0),
-                    padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 12.0, horizontal: 16.0),
                     decoration: BoxDecoration(
-                      color: selectedIndex == index ? Colors.white : Color(0xFFEAAE16),
+                      color: selectedIndex == index
+                          ? Colors.white
+                          : Color(0xFFEAAE16),
                       borderRadius: BorderRadius.circular(12.0),
-                      border: Border.all(color: selectedIndex == index ? Colors.white : Color(0xFFEAAE16)),
+                      border: Border.all(
+                          color: selectedIndex == index
+                              ? Colors.white
+                              : Color(0xFFEAAE16)),
                       boxShadow: selectedIndex == index
-                          ? [BoxShadow(color: Colors.amber.withOpacity(0.3), blurRadius: 8.0, spreadRadius: 2.0)]
+                          ? [
+                              BoxShadow(
+                                  color: Colors.amber.withOpacity(0.3),
+                                  blurRadius: 8.0,
+                                  spreadRadius: 2.0)
+                            ]
                           : [],
                     ),
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Icon(categories[index]['icon'], color: selectedIndex == index ? Colors.black : Colors.white),
+                        Icon(categories[index]['icon'],
+                            color: selectedIndex == index
+                                ? Colors.black
+                                : Colors.white),
                         const SizedBox(height: 8.0),
                         Text(
                           categories[index]['label'],
-                          style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: selectedIndex == index ? Colors.black : Colors.white),
+                          style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                              color: selectedIndex == index
+                                  ? Colors.black
+                                  : Colors.white),
                         ),
                       ],
                     ),
@@ -131,7 +155,10 @@ class _MenuPageState extends State<MenuPage> {
             alignment: Alignment.topLeft,
             child: Text(
               'Order Menu',
-              style: TextStyle(color: Colors.black87, fontWeight: FontWeight.bold, fontSize: 25),
+              style: TextStyle(
+                  color: Colors.black87,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 25),
             ),
           ),
         ),
@@ -152,18 +179,21 @@ class _MenuPageState extends State<MenuPage> {
           alignment: Alignment.topLeft,
           child: Text(
             'Order/s',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.white),
+            style: TextStyle(
+                fontWeight: FontWeight.bold, fontSize: 20, color: Colors.white),
           ),
         ),
       ),
     );
   }
+
   Widget buildOrderSection2() {
     return Container(
       margin: const EdgeInsets.only(top: 20),
       decoration: const BoxDecoration(
         color: Color(0xFFEAAE16),
-        borderRadius: BorderRadius.only(topLeft: Radius.circular(30), topRight: Radius.circular(30)),
+        borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(30), topRight: Radius.circular(30)),
       ),
       child: const Padding(
         padding: EdgeInsets.all(20.0),
@@ -171,7 +201,8 @@ class _MenuPageState extends State<MenuPage> {
           alignment: Alignment.topLeft,
           child: Text(
             'Order/s',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.white),
+            style: TextStyle(
+                fontWeight: FontWeight.bold, fontSize: 20, color: Colors.white),
           ),
         ),
       ),
@@ -184,23 +215,26 @@ class _MenuPageState extends State<MenuPage> {
       height: isExpanded ? 500 : 300, // Toggle height
       decoration: const BoxDecoration(
         color: Color(0xFFEAAE16),
-        borderRadius: BorderRadius.only(topLeft: Radius.circular(30), topRight: Radius.circular(30)),
+        borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(30), topRight: Radius.circular(30)),
       ),
       child: Column(
         children: [
           // Drag Handle (Like a Bottom Sheet)
           ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Color(0xFFEAAE16),
-              elevation: 0
-            ),
-            onPressed: () {
-              setState(() {
-                isExpanded = !isExpanded; // Toggle height
-              });
-            }, 
-            child: Image.asset('assets/images/icons8_horizontal_line_48.png', width: 40, height: 20,color: Colors.white,)
-            ),
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: Color(0xFFEAAE16), elevation: 0),
+              onPressed: () {
+                setState(() {
+                  isExpanded = !isExpanded; // Toggle height
+                });
+              },
+              child: Image.asset(
+                'assets/images/icons8_horizontal_line_48.png',
+                width: 40,
+                height: 20,
+                color: Colors.white,
+              )),
           Padding(
             padding: const EdgeInsets.all(10.0),
             child: Align(
@@ -209,13 +243,17 @@ class _MenuPageState extends State<MenuPage> {
                 padding: EdgeInsets.only(left: 20),
                 child: Text(
                   'Order/s',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.white),
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                      color: Colors.white),
                 ),
               ),
             ),
           ),
           Expanded(
-            child: Center(child: Text("Orders List Here")), // Placeholder for orders
+            child: Center(
+                child: Text("Orders List Here")), // Placeholder for orders
           ),
         ],
       ),

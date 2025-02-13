@@ -4,6 +4,8 @@ import '../manager/dashboard.dart';
 import '../manager/menu.dart';
 
 class MainPage extends StatefulWidget {
+  const MainPage({super.key});
+
   @override
   _MainPageState createState() => _MainPageState();
 }
@@ -12,7 +14,7 @@ class _MainPageState extends State<MainPage> {
   int _selectedIndex = 0;
 
   final List<Widget> _pages = [
-    Dashboard(),
+    ManagerDashboard(),
     MenuPage(),
     InventoryPage(),
   ];
