@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:mobile_pos/screens/admin/graph/pieGraph.dart';
 import 'package:mobile_pos/screens/admin/graph/order.dart';
 import 'package:mobile_pos/screens/admin/graph/product.dart';
 import 'package:mobile_pos/screens/admin/graph/sale.dart';
@@ -141,19 +140,6 @@ class AdminDashboard extends StatelessWidget {
                         ],
                       ),
                     ),
-                    Expanded(
-                        flex: 1,
-                        child: Column(children: [
-                          Container(
-                            margin: EdgeInsets.only(top: 20, left: 15),
-                            decoration: BoxDecoration(
-                              color: Colors.black87,
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(10)),
-                            ),
-                            child: Chart(),
-                          )
-                        ]))
                   ],
                 ),
               ],
