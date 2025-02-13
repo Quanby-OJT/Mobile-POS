@@ -1,10 +1,10 @@
 const supabase = require('../config/supabaseClient');
 
 class UserModel {
-    const password = "password";
-    const email = "test@test.com"
-    const activation = 1
-    const status = 0
+    //const password = "password";
+    //const email = "test@test.com"
+    //const activation = 1
+    //const status = 0
       static async attemptLoginAuth(email) {
         //console.log(email)
         const { data, error } = await supabase
@@ -95,12 +95,19 @@ class UserModel {
         return data;
     }
 
-
     static async resetOTPAuth(user_id)
     {
         const { data, error } = await supabase.from('two_fa_code').update([{ two_fa_code: null, two_fa_code_expires_at: null }]).eq('user_id', user_id);
         //console.log({ data, error }); // Log the response for debugging
         if (error) throw new Error(error.message);
+    }
+
+    static async userSession(user_id)
+    {
+        const {data, error} = await supabase.from('users').select('roles (role_id, user_roles)').eq('user_id')
+        //console.log({ data, error }); // Log the response for debugging
+        if (error) throw new Error(error.message)
+        return data;
     }
 }
 
