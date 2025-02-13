@@ -15,7 +15,7 @@ class _HomePageState extends State<HomePage> {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   String message = "";
-  List<User> users = [];
+  List<AuthenticatedUser> users = [];
 
   // Fetch users
   /*
@@ -128,11 +128,11 @@ class _HomePageState extends State<HomePage> {
                 itemCount: users.length,
                 itemBuilder: (context, index) {
                   final user = users[index];
-                  return ListTile(
-                    title: Text(user.name),
-                    subtitle: Text(user.email),
-                    leading: Icon(Icons.person),
-                  );
+                  //return ListTile(
+                  //  title: Text(user.name),
+                  //  subtitle: Text(user.email),
+                   // leading: Icon(Icons.person),
+                  //);
                 },
               ),
             ),

@@ -1,22 +1,27 @@
-class User {
-  final String name;
-  final String email;
+import 'dart:ui';
 
-  User({required this.name, required this.email});
+class AuthenticatedUser {
+  final String email;
+  final String roles;
+  final Image image;
+
+  AuthenticatedUser({required this.email, required this.roles, required this.image});
 
   // Convert JSON to User object
-  factory User.fromJson(Map<String, dynamic> json) {
-    return User(
-      name: json['name'],
+  factory AuthenticatedUser.fromJson(Map<String, dynamic> json) {
+    return AuthenticatedUser(
+      roles: json['role'],
       email: json['email'],
+      image: json['image_link']
     );
   }
 
   // Convert User object to JSON
   Map<String, dynamic> toJson() {
     return {
-      "name": name,
+      "role": roles,
       "email": email,
+      "image_link": image
     };
   }
 }
