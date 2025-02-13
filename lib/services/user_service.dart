@@ -29,10 +29,8 @@ class UserService {
     throw Exception("An unknown error occurred.");
   }
 
-
-  static Future<String> otpAuthentication(String otp, String user_id) async {
-    final response = await http.post(
-        Uri.parse('$baseUrl/otp-authentication'),
+  static Future<dynamic> otpAuthentication(String otp, String user_id) async {
+    final response = await http.post(Uri.parse('$baseUrl/login-authentication'),
         headers: {"Content-Type": "application/json"},
         body: jsonEncode({"otp": otp, "user_id" : user_id})
     );
