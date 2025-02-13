@@ -1,135 +1,222 @@
-import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 
 class Staffs extends StatefulWidget {
-  const Staffs({super.key});
+  const Staffs({Key? key}) : super(key: key);
 
   @override
   _StaffsState createState() => _StaffsState();
 }
 
 class _StaffsState extends State<Staffs> {
-  List<Map<String, dynamic>> inventory = [];
-  final ImagePicker _picker = ImagePicker();
+  List<Manager> managers = [
+    Manager(
+      profileImage: "https://via.placeholder.com/150",
+      firstName: "John",
+      lastName: "Doe",
+      contact: "1234567890",
+      role: "Admin",
+      email: "john.doe@example.com",
+      password: "******",
+    ),
+  ];
 
-  void _addItem() {
-    String name = '';
-    String quantity = '';
-    String price = '';
-    Uint8List? imageBytes;
+  List<Cashier> cashiers = [];
+
+  void _showAddManagerDialog() {
+    final _formKey = GlobalKey<FormState>();
+    String profileImage = "";
+    String firstName = "";
+    String lastName = "";
+    String contact = "";
+    String role = "";
+    String email = "";
+    String password = "";
 
     showDialog(
       context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Add Item'),
-          content: SingleChildScrollView(
+      builder: (context) => AlertDialog(
+        title: const Text("Add Manager"),
+        content: Form(
+          key: _formKey,
+          child: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                TextField(
-                  decoration: InputDecoration(labelText: 'Item Name'),
-                  onChanged: (value) => name = value,
+                TextFormField(
+                  decoration: const InputDecoration(labelText: "Profile Image URL"),
+                  onSaved: (value) => profileImage = value ?? "",
                 ),
-                TextField(
-                  decoration: InputDecoration(labelText: 'Quantity'),
-                  keyboardType: TextInputType.number,
-                  onChanged: (value) => quantity = value,
+                TextFormField(
+                  decoration: const InputDecoration(labelText: "First Name"),
+                  onSaved: (value) => firstName = value ?? "",
+                  validator: (value) => value!.isEmpty ? "Enter first name" : null,
                 ),
-                TextField(
-                  decoration: InputDecoration(labelText: 'Price (\$)'),
-                  keyboardType: TextInputType.number,
-                  onChanged: (value) => price = value,
+                TextFormField(
+                  decoration: const InputDecoration(labelText: "Last Name"),
+                  onSaved: (value) => lastName = value ?? "",
+                  validator: (value) => value!.isEmpty ? "Enter last name" : null,
                 ),
-                SizedBox(height: 10),
-                ElevatedButton(
-                  onPressed: () async {
-                    final pickedFile =
-                        await _picker.pickImage(source: ImageSource.gallery);
-                    if (pickedFile != null) {
-                      final bytes = await pickedFile.readAsBytes();
-                      setState(() {
-                        imageBytes = bytes;
-                      });
-                    }
-                  },
-                  child: Text('Choose Image'),
+                TextFormField(
+                  decoration: const InputDecoration(labelText: "Contact"),
+                  keyboardType: TextInputType.phone,
+                  onSaved: (value) => contact = value ?? "",
+                  validator: (value) => value!.isEmpty ? "Enter contact" : null,
                 ),
-                imageBytes != null
-                    ? Image.memory(imageBytes!, height: 100)
-                    : Expanded(
-                        child: Text('data'),
-                      ),
+                TextFormField(
+                  decoration: const InputDecoration(labelText: "Role"),
+                  onSaved: (value) => role = value ?? "",
+                ),
+                TextFormField(
+                  decoration: const InputDecoration(labelText: "Email"),
+                  keyboardType: TextInputType.emailAddress,
+                  onSaved: (value) => email = value ?? "",
+                  validator: (value) =>
+                      value!.contains("@") ? null : "Enter a valid email",
+                ),
+                TextFormField(
+                  decoration: const InputDecoration(labelText: "Password"),
+                  obscureText: true,
+                  onSaved: (value) => password = value ?? "",
+                  validator: (value) =>
+                      value!.length >= 6 ? null : "Password must be at least 6 characters",
+                ),
               ],
             ),
           ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: Text('Cancel'),
-            ),
-            ElevatedButton(
-              onPressed: () {
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text("Cancel"),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              if (_formKey.currentState!.validate()) {
+                _formKey.currentState!.save();
                 setState(() {
-                  inventory.add({
-                    'name': name,
-                    'quantity': int.tryParse(quantity) ?? 0,
-                    'price': double.tryParse(price) ?? 0.0,
-                    'image': imageBytes,
-                  });
+                  managers.add(Manager(
+                    profileImage: profileImage.isNotEmpty
+                        ? profileImage
+                        : "https://via.placeholder.com/150",
+                    firstName: firstName,
+                    lastName: lastName,
+                    contact: contact,
+                    role: role,
+                    email: email,
+                    password: "******",
+                  ));
                 });
                 Navigator.pop(context);
-              },
-              child: Text('Add'),
-            ),
-          ],
-        );
-      },
+              }
+            },
+            child: const Text("Add"),
+          ),
+        ],
+      ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('Inventory')),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text("User Management"),
+          bottom: const TabBar(
+            tabs: [
+              Tab(text: "Manager"),
+              Tab(text: "Cashier"),
+            ],
+          ),
+        ),
+        body: TabBarView(
           children: [
-            ElevatedButton(
-              onPressed: _addItem,
-              child: Text('Add Item'),
-            ),
-            SizedBox(height: 16),
-            Expanded(
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: DataTable(
-                  columns: [
-                    DataColumn(label: Text('Image')),
-                    DataColumn(label: Text('Item Name')),
-                    DataColumn(label: Text('Quantity')),
-                    DataColumn(label: Text('Price (\$)')),
-                  ],
-                  rows: inventory.map((item) {
-                    return DataRow(cells: [
-                      DataCell(item['image'] != null
-                          ? Image.memory(item['image'], height: 50, width: 50)
-                          : Icon(Icons.image_not_supported)),
-                      DataCell(Text(item['name'])),
-                      DataCell(Text(item['quantity'].toString())),
-                      DataCell(Text(item['price'].toStringAsFixed(2))),
-                    ]);
-                  }).toList(),
-                ),
-              ),
-            ),
+            _buildManagerTable(),
+            _buildCashierTable(),
           ],
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: _showAddManagerDialog,
+          child: const Icon(Icons.add),
         ),
       ),
     );
   }
+
+  Widget _buildManagerTable() {
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: DataTable(
+        columns: const [
+          DataColumn(label: Text("Profile")),
+          DataColumn(label: Text("First Name")),
+          DataColumn(label: Text("Last Name")),
+          DataColumn(label: Text("Contact")),
+          DataColumn(label: Text("Role")),
+          DataColumn(label: Text("Email")),
+          DataColumn(label: Text("Password")),
+        ],
+        rows: managers
+            .map(
+              (manager) => DataRow(cells: [
+                DataCell(CircleAvatar(
+                  backgroundImage: NetworkImage(manager.profileImage),
+                )),
+                DataCell(Text(manager.firstName)),
+                DataCell(Text(manager.lastName)),
+                DataCell(Text(manager.contact)),
+                DataCell(Text(manager.role)),
+                DataCell(Text(manager.email)),
+                DataCell(Text(manager.password)),
+              ]),
+            )
+            .toList(),
+      ),
+    );
+  }
+
+  Widget _buildCashierTable() {
+    return Center(child: Text("Cashier Table (Coming Soon)"));
+  }
+}
+
+class Manager {
+  final String profileImage;
+  final String firstName;
+  final String lastName;
+  final String contact;
+  final String role;
+  final String email;
+  final String password;
+
+  Manager({
+    required this.profileImage,
+    required this.firstName,
+    required this.lastName,
+    required this.contact,
+    required this.role,
+    required this.email,
+    required this.password,
+  });
+}
+
+class Cashier {
+  final String profileImage;
+  final String firstName;
+  final String lastName;
+  final String contact;
+  final String role;
+  final String email;
+  final String password;
+
+  Cashier({
+    required this.profileImage,
+    required this.firstName,
+    required this.lastName,
+    required this.contact,
+    required this.role,
+    required this.email,
+    required this.password,
+  });
 }
