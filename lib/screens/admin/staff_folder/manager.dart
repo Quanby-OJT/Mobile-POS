@@ -1,27 +1,29 @@
 import 'package:flutter/material.dart';
 
-class Status extends StatefulWidget {
-  const Status({super.key});
+class buildManagerTable extends StatefulWidget {
+  const buildManagerTable({super.key});
 
   @override
-  State<Status> createState() => _buildStatusState();
+  State<buildManagerTable> createState() => _buildManagerTableState();
 }
 
 class Manager {
   final String profileImage;
   final String fullname;
-  final String login;
-  final String logout;
+  final String contact;
+  final String activation;
+  final String status;
 
   Manager({
     required this.profileImage,
     required this.fullname,
-    required this.login,
-    required this.logout,
+    required this.contact,
+    required this.activation,
+    required this.status,
   });
 }
 
-class _buildStatusState extends State<Status>
+class _buildManagerTableState extends State<buildManagerTable>
     with SingleTickerProviderStateMixin {
   String numberSet = '20';
   int currentPage = 1;
@@ -37,62 +39,142 @@ class _buildStatusState extends State<Status>
     Manager(
       profileImage: "https://via.placeholder.com/150",
       fullname: "Alice B. Johnson",
-      login: "02-14-25 10-15-30",
-      logout: "02-14-25 18-45-50",
+      contact: "1231231234",
+      activation: 'enabled',
+      status: 'active',
     ),
     Manager(
       profileImage: "https://via.placeholder.com/150",
-      fullname: "Michael D. Smith",
-      login: "02-14-25 08-20-10",
-      logout: "02-14-25 17-30-25",
+      fullname: "Michael C. Smith",
+      contact: "1231231234",
+      activation: 'disabled',
+      status: 'inactive',
     ),
     Manager(
       profileImage: "https://via.placeholder.com/150",
-      fullname: "Sarah L. Williams",
-      login: "02-14-25 09-05-55",
-      logout: "02-14-25 16-50-40",
+      fullname: "Sarah D. Lee",
+      contact: "4564564567",
+      activation: 'enabled',
+      status: 'active',
     ),
     Manager(
       profileImage: "https://via.placeholder.com/150",
-      fullname: "David R. Brown",
-      login: "02-14-25 07-30-20",
-      logout: "02-14-25 15-10-35",
+      fullname: "Robert T. Brown",
+      contact: "7897897890",
+      activation: 'enabled',
+      status: 'active',
     ),
     Manager(
       profileImage: "https://via.placeholder.com/150",
-      fullname: "Emily T. Davis",
-      login: "02-14-25 06-45-15",
-      logout: "02-14-25 14-55-05",
+      fullname: "Jessica M. Garcia",
+      contact: "1112223333",
+      activation: 'disabled',
+      status: 'inactive',
     ),
     Manager(
       profileImage: "https://via.placeholder.com/150",
-      fullname: "Robert W. Garcia",
-      login: "02-14-25 11-10-50",
-      logout: "02-14-25 19-20-45",
+      fullname: "David R. Wilson",
+      contact: "5556667777",
+      activation: 'enabled',
+      status: 'active',
     ),
     Manager(
       profileImage: "https://via.placeholder.com/150",
-      fullname: "Jessica M. Martinez",
-      login: "02-14-25 12-25-35",
-      logout: "02-14-25 20-30-15",
+      fullname: "Emily H. Martinez",
+      contact: "9998887777",
+      activation: 'enabled',
+      status: 'active',
     ),
     Manager(
       profileImage: "https://via.placeholder.com/150",
-      fullname: "Christopher J. Wilson",
-      login: "02-14-25 05-55-40",
-      logout: "02-14-25 13-45-55",
+      fullname: "Daniel O. Clark",
+      contact: "4445556666",
+      activation: 'disabled',
+      status: 'inactive',
     ),
     Manager(
       profileImage: "https://via.placeholder.com/150",
-      fullname: "Laura E. Anderson",
-      login: "02-14-25 10-40-25",
-      logout: "02-14-25 18-25-30",
+      fullname: "Laura P. White",
+      contact: "7778889999",
+      activation: 'enabled',
+      status: 'active',
     ),
     Manager(
       profileImage: "https://via.placeholder.com/150",
-      fullname: "Daniel K. Thomas",
-      login: "02-14-25 09-35-50",
-      logout: "02-14-25 17-15-20",
+      fullname: "James L. Hernandez",
+      contact: "3334445555",
+      activation: 'enabled',
+      status: 'active',
+    ),
+    Manager(
+      profileImage: "https://via.placeholder.com/150",
+      fullname: "Alice B. Johnson",
+      contact: "0987654321",
+      activation: 'enabled',
+      status: 'active',
+    ),
+    Manager(
+      profileImage: "https://via.placeholder.com/150",
+      fullname: "Michael C. Smith",
+      contact: "1231231234",
+      activation: 'disabled',
+      status: 'inactive',
+    ),
+    Manager(
+      profileImage: "https://via.placeholder.com/150",
+      fullname: "Sarah D. Lee",
+      contact: "4564564567",
+      activation: 'enabled',
+      status: 'active',
+    ),
+    Manager(
+      profileImage: "https://via.placeholder.com/150",
+      fullname: "Robert T. Brown",
+      contact: "7897897890",
+      activation: 'enabled',
+      status: 'active',
+    ),
+    Manager(
+      profileImage: "https://via.placeholder.com/150",
+      fullname: "Jessica M. Garcia",
+      contact: "1112223333",
+      activation: 'disabled',
+      status: 'inactive',
+    ),
+    Manager(
+      profileImage: "https://via.placeholder.com/150",
+      fullname: "David R. Wilson",
+      contact: "5556667777",
+      activation: 'enabled',
+      status: 'active',
+    ),
+    Manager(
+      profileImage: "https://via.placeholder.com/150",
+      fullname: "Emily H. Martinez",
+      contact: "9998887777",
+      activation: 'enabled',
+      status: 'active',
+    ),
+    Manager(
+      profileImage: "https://via.placeholder.com/150",
+      fullname: "Daniel O. Clark",
+      contact: "4445556666",
+      activation: 'disabled',
+      status: 'inactive',
+    ),
+    Manager(
+      profileImage: "https://via.placeholder.com/150",
+      fullname: "Laura P. White",
+      contact: "7778889999",
+      activation: 'enabled',
+      status: 'active',
+    ),
+    Manager(
+      profileImage: "https://via.placeholder.com/150",
+      fullname: "James L. Hernandez",
+      contact: "3334445555",
+      activation: 'enabled',
+      status: 'active',
     ),
   ];
 
@@ -205,7 +287,20 @@ class _buildStatusState extends State<Status>
                                 foregroundColor: Colors.white,
                               ),
                             ),
-                          )
+                          ),
+                          const SizedBox(width: 20),
+                          ElevatedButton.icon(
+                            onPressed: () => _onAddPressed(context),
+                            icon: const Icon(Icons.add),
+                            label: const Text("Add"),
+                            style: ElevatedButton.styleFrom(
+                              minimumSize: Size(100, 55),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10)),
+                              backgroundColor: Colors.blue,
+                              foregroundColor: Colors.white,
+                            ),
+                          ),
                         ],
                       ),
                     ],
@@ -260,7 +355,7 @@ class _buildStatusState extends State<Status>
                                 child: Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
-                                    const Text("Login"),
+                                    const Text("Contact"),
                                     SizedBox(width: 5),
                                     IconButton(
                                       onPressed: () {
@@ -277,7 +372,24 @@ class _buildStatusState extends State<Status>
                                 child: Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
-                                    const Text("Logout"),
+                                    const Text("Activation"),
+                                    SizedBox(width: 5),
+                                    IconButton(
+                                      onPressed: () {
+                                        print('Sort Action');
+                                      },
+                                      icon: const Icon(Icons.unfold_more),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            DataColumn(
+                              label: Center(
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    const Text("Status"),
                                     SizedBox(width: 5),
                                     IconButton(
                                       onPressed: () {
@@ -315,25 +427,44 @@ class _buildStatusState extends State<Status>
                                         NetworkImage(manager.profileImage),
                                   )),
                                   DataCell(Text(manager.fullname)),
-                                  DataCell(Text(manager.login)),
-                                  DataCell(Text(manager.logout)),
+                                  DataCell(Text(manager.contact)),
+                                  DataCell(Text(manager.activation)),
+                                  DataCell(SizedBox(
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        color: const Color.fromARGB(
+                                            255, 73, 196, 6),
+                                        borderRadius: BorderRadius.circular(20),
+                                      ),
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 10, vertical: 5),
+                                      child: Text(manager.status),
+                                    ),
+                                  )),
                                   DataCell(Expanded(
                                       child: Row(
                                     children: [
                                       Container(
-                                        child: ElevatedButton.icon(
-                                          onPressed: () => (),
-                                          label: const Text("View"),
-                                          style: ElevatedButton.styleFrom(
-                                            minimumSize: Size(50, 30),
-                                            shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(10)),
-                                            backgroundColor: Colors.blue,
-                                            foregroundColor: Colors.white,
+                                          child: Row(
+                                        children: [
+                                          IconButton(
+                                            icon: Icon(
+                                              Icons.edit,
+                                              color: Colors.green,
+                                              size: 25,
+                                            ),
+                                            onPressed: () {},
                                           ),
-                                        ),
-                                      )
+                                          IconButton(
+                                            icon: Icon(
+                                              Icons.delete,
+                                              color: Colors.red,
+                                              size: 25,
+                                            ),
+                                            onPressed: () {},
+                                          ),
+                                        ],
+                                      ))
                                     ],
                                   )))
                                 ]),

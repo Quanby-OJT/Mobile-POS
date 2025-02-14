@@ -78,11 +78,9 @@ class _OrderState extends State<Order> {
                     builder: (context, constraints) {
                       double columnWidth = constraints.maxWidth / 7;
 
-                      return Center(
+                      return SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
                         child: DataTable(
-                          columnSpacing: 0,
-                          headingRowHeight: 40,
-                          horizontalMargin: 0,
                           columns: [
                             DataColumn(
                               label: SizedBox(
@@ -90,7 +88,38 @@ class _OrderState extends State<Order> {
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    Text('Order ID'),
+                                    Center(
+                                        child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Container(
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Container(
+                                                decoration: BoxDecoration(),
+                                                child: Expanded(
+                                                    child: Row(
+                                                  children: [
+                                                    Text(
+                                                      'Order ID',
+                                                    ),
+                                                    IconButton(
+                                                        onPressed: () {},
+                                                        icon: Icon(
+                                                          Icons.unfold_more,
+                                                          size: 15,
+                                                        ))
+                                                  ],
+                                                )),
+                                              ),
+                                            ],
+                                          ),
+                                        )
+                                      ],
+                                    )),
                                   ],
                                 ),
                               ),
@@ -102,12 +131,37 @@ class _OrderState extends State<Order> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Center(
-                                      child: Row(
-                                        children: [
-                                          Text('Type'),
-                                        ],
-                                      ),
-                                    )
+                                        child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Container(
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Container(
+                                                decoration: BoxDecoration(),
+                                                child: Expanded(
+                                                    child: Row(
+                                                  children: [
+                                                    Text(
+                                                      'Type',
+                                                    ),
+                                                    IconButton(
+                                                        onPressed: () {},
+                                                        icon: Icon(
+                                                          Icons.unfold_more,
+                                                          size: 15,
+                                                        ))
+                                                  ],
+                                                )),
+                                              ),
+                                            ],
+                                          ),
+                                        )
+                                      ],
+                                    )),
                                   ],
                                 ),
                               ),
@@ -119,7 +173,31 @@ class _OrderState extends State<Order> {
                                     child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    Text('Status '),
+                                    Container(
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Container(
+                                            decoration: BoxDecoration(),
+                                            child: Expanded(
+                                                child: Row(
+                                              children: [
+                                                Text(
+                                                  'Status',
+                                                ),
+                                                IconButton(
+                                                    onPressed: () {},
+                                                    icon: Icon(
+                                                      Icons.unfold_more,
+                                                      size: 15,
+                                                    ))
+                                              ],
+                                            )),
+                                          ),
+                                        ],
+                                      ),
+                                    )
                                   ],
                                 )),
                               ),
@@ -133,8 +211,26 @@ class _OrderState extends State<Order> {
                                   children: [
                                     Container(
                                       child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
                                         children: [
-                                          Text('Product'),
+                                          Container(
+                                            decoration: BoxDecoration(),
+                                            child: Expanded(
+                                                child: Row(
+                                              children: [
+                                                Text(
+                                                  'Product',
+                                                ),
+                                                IconButton(
+                                                    onPressed: () {},
+                                                    icon: Icon(
+                                                      Icons.unfold_more,
+                                                      size: 15,
+                                                    ))
+                                              ],
+                                            )),
+                                          ),
                                         ],
                                       ),
                                     )
@@ -149,7 +245,31 @@ class _OrderState extends State<Order> {
                                     child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    Text('Total'),
+                                    Container(
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Container(
+                                            decoration: BoxDecoration(),
+                                            child: Expanded(
+                                                child: Row(
+                                              children: [
+                                                Text(
+                                                  'Total',
+                                                ),
+                                                IconButton(
+                                                    onPressed: () {},
+                                                    icon: Icon(
+                                                      Icons.unfold_more,
+                                                      size: 15,
+                                                    ))
+                                              ],
+                                            )),
+                                          ),
+                                        ],
+                                      ),
+                                    )
                                   ],
                                 )),
                               ),
@@ -161,7 +281,31 @@ class _OrderState extends State<Order> {
                                     child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    Text('Date'),
+                                    Container(
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Container(
+                                            decoration: BoxDecoration(),
+                                            child: Expanded(
+                                                child: Row(
+                                              children: [
+                                                Text(
+                                                  'Date',
+                                                ),
+                                                IconButton(
+                                                    onPressed: () {},
+                                                    icon: Icon(
+                                                      Icons.unfold_more,
+                                                      size: 15,
+                                                    ))
+                                              ],
+                                            )),
+                                          ),
+                                        ],
+                                      ),
+                                    )
                                   ],
                                 )),
                               ),
@@ -200,7 +344,9 @@ class _OrderState extends State<Order> {
                                 )),
                                 DataCell(SizedBox(
                                   width: columnWidth,
-                                  child: Center(child: Text(product['type'])),
+                                  child: Center(
+                                    child: Text(product['type']),
+                                  ),
                                 )),
                                 DataCell(SizedBox(
                                   width: columnWidth,
@@ -227,7 +373,7 @@ class _OrderState extends State<Order> {
                                   width: columnWidth,
                                   child: Center(
                                     child: IconButton(
-                                      icon: Icon(Icons.more_horiz),
+                                      icon: Icon(Icons.visibility),
                                       onPressed: () {
                                         Navigator.push(
                                             context,
