@@ -1,7 +1,7 @@
 const UserModel = require('../models/userModel');
 
 class UserController {
-    static async addUser(req, res) {
+    static async createUser(req, res) {
         try {
             const { name, email } = req.body;
 

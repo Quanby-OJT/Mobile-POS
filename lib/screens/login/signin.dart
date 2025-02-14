@@ -168,7 +168,7 @@ class _SignInPageState extends State<SignInPage> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => OtpPage(user_id: userId),
+                                  builder: (context) => OtpPage(userId: userId),
                                 ),
                               );
                             } else {

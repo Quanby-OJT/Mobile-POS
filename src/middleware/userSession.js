@@ -1,11 +1,23 @@
-const expressJWT = require('express-jwt')
+const { expressjwt } = require('express-jwt'); // Import expressjwt from express-jwt
 
-const sessionJWT = expressJWT({
-    secret: process.env.JWT_SECRET,
-    algorithms: ['HS256'],
-    requestProperty: 'auth', // The decoded token will be attached to `req.auth`
-  }).unless({
-    path: ['/login', '/otp-authentication'], // Exclude paths that don't require authentication
-  });
-  
-  module.exports = sessionJWT;
+// Define the JWT middleware
+const sessionJWT = expressjwt({
+  secret: process.env.JWT_SECRET, // The secret key for signing tokens
+  algorithms: ['HS256'], // Specify the algorithm used for signing
+  requestProperty: 'auth', // Attach the decoded token to req.auth
+});
+
+// Exclude paths manually
+const jwtMiddleware = (req, res, next) => {
+  const excludedPaths = ['/login', '/otp-authentication'];
+
+  // Skip JWT middleware for excluded paths
+  if (excludedPaths.includes(req.path)) {
+    return next();
+  }
+
+  // Run the JWT middleware for all other paths
+  sessionJWT(req, res, next);
+};
+
+module.exports = jwtMiddleware;

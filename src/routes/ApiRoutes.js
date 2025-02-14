@@ -15,11 +15,13 @@ router.get('/', (req, res) => {
     res.send('Hello. Whos this?')
 })
 
+//Protected Routes
 router.post('/add-product', upload.single('image'), InventoryController.addProduct);
 router.get('/all-products', InventoryController.getAllProducts);
 
+//Authentication Routes
 router.post('/login-authentication', AuthenticationController.loginAuthentication)
 router.post('/otp-authentication', AuthenticationController.otpAuthentication)
-router.post('/user-session', sessionJWT, AuthenticationController.setSession)
+router.post('/user-session', AuthenticationController.setSession)
 
 module.exports = router;
