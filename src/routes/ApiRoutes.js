@@ -1,6 +1,6 @@
 const express = require('express');
 const multer = require('multer');
-const UserController = require('../controllers/userController');
+const sessionJWT = require('../middleware/userSession')
 const InventoryController = require('../controllers/inventoryController');
 const AuthenticationController = require('../controllers/authenticationController');
 
@@ -20,6 +20,6 @@ router.get('/all-products', InventoryController.getAllProducts);
 
 router.post('/login-authentication', AuthenticationController.loginAuthentication)
 router.post('/otp-authentication', AuthenticationController.otpAuthentication)
-router.get('/user-session', AuthenticationController.setSession)
+router.post('/user-session', sessionJWT, AuthenticationController.setSession)
 
 module.exports = router;

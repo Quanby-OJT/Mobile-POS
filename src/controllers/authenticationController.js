@@ -1,6 +1,8 @@
 const UserModel = require('../models/userModel')
 const mailer = require('../config/mailtrapClient')
 const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
+const {v4: uuidv4} = require('uuid')
 
 /**
  * For Debugging some logic, uncomment console.log and/or console.error to view errors easily. If you can't debug it, increment the following:
@@ -35,7 +37,7 @@ class AuthenticationController {
                 return res.status(400).json({ message: 'Incorrect Password. Please Try Again.' });
             }
 
-            console.log(verify)
+            //console.log(verify)
             // Code for Redirection and OTP Generation
             const otpResult = await UserModel.generateOTP(verify.user_id)
             console.log(otpResult.otp); // Log the OTP for debugging purposes
@@ -97,7 +99,13 @@ class AuthenticationController {
             }
             
             await UserModel.resetOTPAuth(user_id)
-            const authenticatedUser = await UserModel.userSession(user_id);
+
+            const payload = {user_id, role_id: otp_verify.user.roles.role_id}
+            const token = jwt.sign(payload, process.env.SECRET_KEY, {expiresIn: '4h'})
+
+            const sessionResult = await UserModel.createSession(user_id, otp_verify.user.roles.role_id, token)
+            if(!sessionResult) return res.sttus(500).json({message: "Failed to create Session."})
+            
             return res.status(200).json({role: authenticatedUser.roles.user_roles, user: user_id})
         }catch(error){
             //console.error(error)

@@ -163,7 +163,7 @@ class _SignInPageState extends State<SignInPage> {
 
                             String userId = await loginAuth();
 
-                            if (userId.isEmpty) {
+                            if (userId.isNotEmpty) {
                               // Successful login, navigate to OTP page
                               Navigator.push(
                                 context,

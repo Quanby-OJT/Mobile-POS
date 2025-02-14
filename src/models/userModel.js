@@ -98,6 +98,30 @@ class UserModel {
         //console.log({ data, error }); // Log the response for debugging
         if (error) throw new Error(error.message);
     }
+
+    static async createSession(user_id, role_id, token)
+    {
+        const timestamp = new Date();
+        const expires_at = new Date()
+
+        expires_at.setHours(expires_at.getHours() + 1)
+
+        const {data, error} = await supabase.from('session').insert([{
+            user_id,
+            role_id,
+            unique_token: token,
+            created_at: timestamp,
+            session_expires_at: expires_at
+        }]);
+
+        if(error) 
+        {
+            console.error(error)
+            return null
+        }
+
+        return data;
+    }
 }
 
 module.exports = UserModel;

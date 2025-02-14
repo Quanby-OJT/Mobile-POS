@@ -2,6 +2,8 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class UserService {
+  ///
+  ///NOTE: 
   static const String baseUrl = "http://10.0.2.2:3000/api/connection";
   //static const String baseUrl = "http://localhost:3000/api/connection";
 
@@ -78,7 +80,7 @@ class UserService {
     return "An unknown error occurred.";
   }
 
-  static Future<dynamic> userSession(int user_id) async {
+  static Future<dynamic> userSession(int user_id, String token) async {
     try{
       final response = await http.post(
         Uri.parse('$baseUrl/user-session'),
