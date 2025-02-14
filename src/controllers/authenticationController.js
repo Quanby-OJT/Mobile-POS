@@ -52,7 +52,7 @@ class AuthenticationController {
             const info = mailer.sendMail(mailOptions);
             console.log('Email Sent: ', info.response);
 
-            return res.status(200).json({ user_id: verify.user_id, message: "Generating OTP..." });
+            return res.status(200).json({ user_id: verify.user_id });
 
         } catch (error) {
             console.error(error); // Log the error for debugging
@@ -61,10 +61,10 @@ class AuthenticationController {
     }
 
     static async generateOTP (user_id) {
-        console.log('Hi')
+        //console.log('Hi')
         // Code for Redirection and OTP Generation
         const otpResult = await UserModel.generateOTP(user_id)
-        console.log(otpResult.otp); // Log the OTP for debugging purposes
+        //console.log(otpResult.otp); // Log the OTP for debugging purposes
         const message = "To access the application, you need to enter the following OTP: " + otpResult.otp +  ". Once you are logged in, please delete this email to prevent unauthorized access to your account. \n NOTE: The generated OTP will be only valid at maximum of 3 minutes."
         const mailOptions = {
             from: process.env.SENDER_EMAIL,
@@ -76,7 +76,7 @@ class AuthenticationController {
         const info = await mailer.sendMail(mailOptions);
         console.log('Email Sent: ', info.response);
 
-        return res.status(200).json({ message: "Generating OTP...."});
+        return res.status(200).json({ message: "New OTP sent. Please Check your email."});
     }
 
 
@@ -101,7 +101,7 @@ class AuthenticationController {
             return res.status(200).json({role: authenticatedUser.roles.user_roles, user: user_id})
         }catch(error){
             //console.error(error)
-            return res.status(500).json({ message: 'Error Has occurred While Authenticating OTP. Please Reload this page.'});
+            return res.status(500).json({ message: 'Error Has occurred While Authenticating OTP. Please Reload this page. If the issue persists, contact IT Support.'});
         }
     }
 }

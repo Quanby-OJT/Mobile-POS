@@ -6,18 +6,10 @@ class UserController {
             const { name, email } = req.body;
 
             // Validation
-            if (!name || !email) {
-                return res.status(400).json({ error: 'Name and email are required' });
-            }
-            if (!email.includes('@')) {
-                return res.status(400).json({ error: 'Invalid email format, must have "@"' });
-            }
+            if (!name || !email) return res.status(400).json({ error: 'Name and email are required' });
+            if (!email.includes('@')) return res.status(400).json({ error: 'Invalid email format, must have "@"' });
+            if (!email.includes('.com')) return res.status(400).json({ error: 'Invalid email format, must have ".com"' });
 
-            if (!email.includes('.com')) {
-                return res.status(400).json({ error: 'Invalid email format, must have ".com"' });
-            }
-
-            // Store data in Supabase via UserModel
             const userData = await UserModel.addUser(name, email);
             return res.status(201).json({ message: 'User added successfully', userData });
         } catch (error) {
@@ -35,7 +27,6 @@ class UserController {
             return res.status(500).json({ error: error.message });
         }
     }
-    
 }
 
 module.exports = UserController;

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:mobile_pos/screens/manager/main.dart';
 import 'package:mobile_pos/services/user_service.dart';
 import '../auth/otp.dart';
 
@@ -164,7 +163,7 @@ class _SignInPageState extends State<SignInPage> {
 
                             String userId = await loginAuth();
 
-                            if (userId != null) {
+                            if (userId.isEmpty) {
                               // Successful login, navigate to OTP page
                               Navigator.push(
                                 context,

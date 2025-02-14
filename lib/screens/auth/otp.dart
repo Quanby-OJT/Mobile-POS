@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../manager/main.dart';
 import 'package:mobile_pos/services/user_service.dart';
+import 'package:mobile_pos/screens/manager/dashboard.dart';
 
 class OtpPage extends StatefulWidget {
   final String user_id;
@@ -15,18 +16,21 @@ class _OtpPageState extends State<OtpPage> {
   final TextEditingController otpController = TextEditingController();
   String message = "";
 
-  Future<bool> otpAuth() async {
+  Future<dynamic> otpAuth() async {
     try {
-      final message = await UserService.otpAuthentication(
+      final otp = await UserService.otpAuthentication(
         otpController.text,
         widget.user_id
       );
 
+      final int userId = otp['user_id'];
+      final String role = otp['roles.user_role'];
+
       // If no error is thrown, the login is successful
       setState(() {
-        this.message = message; // Success message
+        this.message = otp; // Success message
       });
-      return true; // Successful login
+      return {userId, role}; // Successful login
     } catch (e) {
       setState(() {
         message = e.toString(); // Display the error message
@@ -108,9 +112,10 @@ class _OtpPageState extends State<OtpPage> {
                   message = "";
                 });
 
-                bool hasOTPVerified = await otpAuth();
+                final hasOTPVerified = await otpAuth();
+                print (hasOTPVerified);
 
-                if(hasOTPVerified){
+                if(hasOTPVerified['user_id'] > 0){
                   //Implementation of Role-Based Access Role.
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text("I logged in to the system.")), // Display the error message

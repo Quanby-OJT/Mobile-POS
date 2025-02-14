@@ -9,7 +9,7 @@ class UserModel {
             .eq('email', email)
             .single();
 
-        //console.log({ data, error }); // Log the response for debugging
+        console.log({ data, error }); // Log the response for debugging
     
         if (error) {
             throw new Error(error.message || "An unknown database error occurred."); // Handle missing message
@@ -84,7 +84,7 @@ class UserModel {
 
     static async attemptOTPAuth(user_id)
     {
-        const {data, error} = await supabase.from('two_fa_code').select('two_fa_code, two_fa_code_expires_at').eq('user_id', user_id).single()
+        const {data, error} = await supabase.from('two_fa_code').select('user (roles (role_id)), two_fa_code, two_fa_code_expires_at').eq('user_id', user_id).single()
         //console.log({ data, error }); // Log the response for debugging
     
         if (error) throw new Error(error.message || "An unknown database error occurred."); // Handle missing message
@@ -97,14 +97,6 @@ class UserModel {
         const { data, error } = await supabase.from('two_fa_code').update([{ two_fa_code: null, two_fa_code_expires_at: null }]).eq('user_id', user_id);
         //console.log({ data, error }); // Log the response for debugging
         if (error) throw new Error(error.message);
-    }
-
-    static async userSession(user_id)
-    {
-        const {data, error} = await supabase.from('users').select('roles (role_id, user_roles)').eq('user_id', user_id)
-        //console.log({ data, error }); // Log the response for debugging
-        if (error) throw new Error(error.message)
-        return data;
     }
 }
 

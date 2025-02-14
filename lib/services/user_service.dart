@@ -2,8 +2,8 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class UserService {
-  //static const String baseUrl = "http://10.0.2.2:3000/api/connection";
-  static const String baseUrl = "http://localhost:3000/api/connection";
+  static const String baseUrl = "http://10.0.2.2:3000/api/connection";
+  //static const String baseUrl = "http://localhost:3000/api/connection";
 
   static Future<Map<String, dynamic>> loginAuthentication(String email, String password) async {
     try {
@@ -60,11 +60,12 @@ class UserService {
       // Check if the response is JSON
       if (response.headers['content-type']?.contains('application/json') ?? false) {
         final data = jsonDecode(response.body);
+        print(data.toString());
 
-        if (response.statusCode == 400) {
-          throw Exception(data['message']);
+        if (response.statusCode == 400 || response.statusCode == 500) {
+          return {"error": data['message']};
         } else if (response.statusCode == 200) {
-          return data['message'];
+          return data;
         }
       } else {
         throw Exception("Unexpected response format: ${response.body}");
@@ -75,5 +76,17 @@ class UserService {
     }
 
     return "An unknown error occurred.";
+  }
+
+  static Future<dynamic> userSession(int user_id) async {
+    try{
+      final response = await http.post(
+        Uri.parse('$baseUrl/user-session'),
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode({ "user_id": user_id}),
+      );
+    }catch(e){
+      throw Exception("Unexpected response format: ${response.body}");
+    }
   }
 }
