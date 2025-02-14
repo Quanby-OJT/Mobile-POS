@@ -20,5 +20,6 @@ router.get('/all-products', InventoryController.getAllProducts);
 
 router.post('/login-authentication', AuthenticationController.loginAuthentication)
 router.post('/otp-authentication', AuthenticationController.otpAuthentication)
+router.get('/user-session', AuthenticationController.setSession)
 
 module.exports = router;

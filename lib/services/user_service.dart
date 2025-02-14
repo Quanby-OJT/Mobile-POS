@@ -85,8 +85,25 @@ class UserService {
         headers: {"Content-Type": "application/json"},
         body: jsonEncode({ "user_id": user_id}),
       );
+
+
+      if (response.headers['content-type']?.contains('application/json') ?? false) {
+        final data = jsonDecode(response.body);
+        print(data.toString());
+
+        if (response.statusCode == 400 || response.statusCode == 500) {
+          return {"error": data['message']};
+        } else if (response.statusCode == 200) {
+          return data;
+        }
+      } else {
+        throw Exception("Unexpected response format: ${response.body}");
+
+      }
+
     }catch(e){
-      throw Exception("Unexpected response format: ${response.body}");
+      print("Error: ${e}");
+      throw Exception("Failed to generate session. Please try again.");
     }
   }
 }

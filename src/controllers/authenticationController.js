@@ -104,6 +104,31 @@ class AuthenticationController {
             return res.status(500).json({ message: 'Error Has occurred While Authenticating OTP. Please Reload this page. If the issue persists, contact IT Support.'});
         }
     }
+
+    static async setSession(){
+        try{
+            //console.log('Hello.')
+            const {otp, user_id} = req.body
+
+            if(!otp) return res.status(400).json({message: "OTP Number Field cannot be empty"})
+
+            const otp_verify = await UserModel.attemptOTPAuth(user_id)
+            //console.log(otp_verify)
+
+            if(otp_verify.two_fa_code !== otp) return res.status(301).json({error: "OTP is Incorrect. Please Check Your Email."})
+            if(new Date(otp_verify.two_fa_code_expires_at).getTime() <= Date.now()){
+                await UserModel.resetOtp(user_id)
+                return res.status(301).json({message: "OTP Verification Expired. Please Login again."})
+            }
+
+            await UserModel.resetOTPAuth(user_id)
+            const authenticatedUser = await UserModel.userSession(user_id);
+            return res.status(200).json({role: authenticatedUser.roles.user_roles, user: user_id})
+        }catch(error){
+            //console.error(error)
+            return res.status(500).json({ message: 'Error Has occurred While Authenticating OTP. Please Reload this page. If the issue persists, contact IT Support.'});
+        }
+    }
 }
 
 module.exports = AuthenticationController
