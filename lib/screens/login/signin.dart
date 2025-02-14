@@ -22,7 +22,7 @@ class _SignInPageState extends State<SignInPage> {
         passwordController.text,
       );
 
-      if(response['user_id'] != null){
+      if (response['user_id'] != null) {
         // If the login is successful, extract user_id
         final userId = response['user_id'];
         print(userId);
@@ -32,7 +32,7 @@ class _SignInPageState extends State<SignInPage> {
         });
 
         return userId.toString();
-      }else if(response['error'] != null){
+      } else if (response['error'] != null) {
         setState(() {
           message = response['error'];
         });
@@ -41,7 +41,9 @@ class _SignInPageState extends State<SignInPage> {
       }
     } catch (e) {
       setState(() {
-        message = e.toString().replaceAll('Exception: ', ''); // Clean up error message
+        message = e
+            .toString()
+            .replaceAll('Exception: ', ''); // Clean up error message
       });
 
       return null; // Indicate login failure
@@ -155,8 +157,7 @@ class _SignInPageState extends State<SignInPage> {
                               minimumSize: Size(double.infinity, 50),
                               backgroundColor: Color(0xFFEAAE16),
                               shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10))
-                            ),
+                                  borderRadius: BorderRadius.circular(10))),
                           onPressed: () async {
                             setState(() {
                               message = ""; // Clear any previous message
@@ -164,20 +165,13 @@ class _SignInPageState extends State<SignInPage> {
 
                             String userId = await loginAuth();
 
-                            if (userId != null) {
-                              // Successful login, navigate to OTP page
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => OtpPage(user_id: userId),
-                                ),
-                              );
-                            } else {
-                              // Display the error message (already set by loginAuth)
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(content: Text(message)), // Show the error as a snack bar
-                              );
-                            }
+                            // Successful login, navigate to OTP page
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => OtpPage(user_id: userId),
+                              ),
+                            );
                           },
                           child: Text(
                             'Sign In',

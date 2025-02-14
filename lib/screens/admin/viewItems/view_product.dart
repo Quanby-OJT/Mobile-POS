@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class ViewProduct extends StatelessWidget {
   final String product;
 
-  const ViewProduct({Key? key, required this.product}) : super(key: key);
+  const ViewProduct({super.key, required this.product});
 
   @override
   Widget build(BuildContext context) {

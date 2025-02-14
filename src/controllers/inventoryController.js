@@ -10,9 +10,9 @@ class InventoryController {
             }
 
             // Get additional data from Flutter
-            const { name, quantity, price } = req.body;
+            const { name, quantity, price, category } = req.body;
 
-            if (!name || !quantity || !price) {
+            if (!name || !quantity || !price || !category) {
                 return res.status(400).json({ error: 'Missing required fields' });
             }
 
@@ -27,7 +27,7 @@ class InventoryController {
             const imageUrl = await InventoryModel.uploadImage(resizedImage, fileName, req.file.mimetype);
 
             // Insert Product using Model
-            const dbData = await InventoryModel.insertProduct(imageUrl, name, quantity, price);
+            const dbData = await InventoryModel.insertProduct(imageUrl, name, quantity, price, category);
 
             res.json({ 
                 message: 'Image uploaded successfully', 
@@ -35,11 +35,13 @@ class InventoryController {
                 name,
                 quantity,
                 price,
-                dbData
+                dbData,
+                category,
             });
 
         } catch (err) {
             res.status(500).json({ error: err.message });
+            console.log('Error in addProduct Method in Controller');
         }
     }
 

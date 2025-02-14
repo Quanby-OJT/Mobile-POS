@@ -210,7 +210,7 @@ class _buildCashierTableState extends State<buildCashierTable>
                     children: [
                       Row(
                         children: [
-                          Container(
+                          SizedBox(
                             width: 300,
                             child: SizedBox(
                               child: TextField(

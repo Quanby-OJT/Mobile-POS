@@ -183,7 +183,9 @@ class _MenuPageState extends State<MenuPage> {
                 child: Text(
                   'Order/s',
                   style: TextStyle(
-                      fontWeight: FontWeight.bold, fontSize: 20, color: Colors.white),
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                      color: Colors.white),
                 ),
               ),
               Container(
@@ -191,25 +193,21 @@ class _MenuPageState extends State<MenuPage> {
                 width: double.infinity,
                 padding: EdgeInsets.all(10),
                 decoration: BoxDecoration(
-                  color: Color(0xFFFFFFF0),
-                  borderRadius: BorderRadius.circular(20)
-                ),
+                    color: Color(0xFFFFFFF0),
+                    borderRadius: BorderRadius.circular(20)),
                 child: Column(
                   children: [
                     Row(
                       children: [
                         Text(
                           'Sub Total:',
-                          style: TextStyle(
-                            color: Colors.black45
-                          ),
+                          style: TextStyle(color: Colors.black45),
                         ),
                         Spacer(),
                         Text(
                           "\$12.00",
                           style: TextStyle(
                             color: Colors.black45,
-                            
                           ),
                         )
                       ],
@@ -218,16 +216,13 @@ class _MenuPageState extends State<MenuPage> {
                       children: [
                         Text(
                           'Tax:',
-                          style: TextStyle(
-                            color: Colors.black45
-                          ),
+                          style: TextStyle(color: Colors.black45),
                         ),
                         Spacer(),
                         Text(
                           "\$2.00",
                           style: TextStyle(
                             color: Colors.black45,
-                           
                           ),
                         )
                       ],
@@ -236,45 +231,36 @@ class _MenuPageState extends State<MenuPage> {
                       padding: EdgeInsets.only(top: 20, bottom: 10),
                       child: Row(
                         children: [
-                          Container(
+                          SizedBox(
                             width: 150,
                             child: TextFormField(
                               cursorColor: Colors.black,
                               decoration: InputDecoration(
-                                fillColor: Colors.white,
-                                filled: true,
-                                hintText: 'Enter amount...',
-                                enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                    color: Colors.grey
-                                  ),
-                                  borderRadius: BorderRadius.circular(10)
-                                )
-                              ),
+                                  fillColor: Colors.white,
+                                  filled: true,
+                                  hintText: 'Enter amount...',
+                                  enabledBorder: OutlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Colors.grey),
+                                      borderRadius: BorderRadius.circular(10))),
                             ),
                           ),
                           Spacer(),
                           TextButton(
-                            
-                            style: TextButton.styleFrom(
-                              minimumSize: Size(50, 50),
-                              backgroundColor: Colors.green,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10)
-                              ) // Set width and height
-                            ),
-                            onPressed: () {
-                      
-                            }, 
-                            child: Text(
-                              'Change',
-                            
-                              style: TextStyle(
-                                color: Colors.white,
-                                backgroundColor: Colors.green
-                              ),
-                            )
-                            )
+                              style: TextButton.styleFrom(
+                                  minimumSize: Size(50, 50),
+                                  backgroundColor: Colors.green,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(
+                                          10)) // Set width and height
+                                  ),
+                              onPressed: () {},
+                              child: Text(
+                                'Change',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    backgroundColor: Colors.green),
+                              ))
                         ],
                       ),
                     ),
@@ -282,16 +268,13 @@ class _MenuPageState extends State<MenuPage> {
                       children: [
                         Text(
                           'Change:',
-                          style: TextStyle(
-                            color: Colors.black45
-                          ),
+                          style: TextStyle(color: Colors.black45),
                         ),
                         Spacer(),
                         Text(
                           "\$2.00",
                           style: TextStyle(
                             color: Colors.black45,
-                            
                           ),
                         )
                       ],
@@ -303,24 +286,20 @@ class _MenuPageState extends State<MenuPage> {
                         width: double.infinity,
                         height: 50,
                         child: ElevatedButton(
-                          
-                          style: ElevatedButton.styleFrom(
-                            maximumSize: Size(double.infinity, 50),
-                            backgroundColor: Color(0xFFC19435),
-                            shape: RoundedRectangleBorder(
+                            style: ElevatedButton.styleFrom(
+                              maximumSize: Size(double.infinity, 50),
+                              backgroundColor: Color(0xFFC19435),
+                              shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10),
+                              ),
                             ),
-                          ),
-                          onPressed: () {
-                        
-                          }, 
-                          child: Text(
-                            'Charge',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold
-                            ),
-                          )),
+                            onPressed: () {},
+                            child: Text(
+                              'Charge',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold),
+                            )),
                       ),
                     ),
                   ],

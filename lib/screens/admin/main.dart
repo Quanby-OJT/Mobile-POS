@@ -6,6 +6,8 @@ import '../admin/reports.dart';
 import '../admin/status.dart';
 
 class AdminMainPage extends StatefulWidget {
+  const AdminMainPage({super.key});
+
   @override
   _AdminMainPageState createState() => _AdminMainPageState();
 }

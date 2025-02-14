@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 
 class Sale extends StatefulWidget {
+  const Sale({super.key});
+
   @override
   _SaleState createState() => _SaleState();
 }

@@ -90,7 +90,7 @@ class ProductStatus extends StatelessWidget {
                     Expanded(
                       child: SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
-                        child: Container(
+                        child: SizedBox(
                           width: products.length * 50.0,
                           child: BarChart(
                             BarChartData(

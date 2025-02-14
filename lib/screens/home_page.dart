@@ -128,10 +128,11 @@ class _HomePageState extends State<HomePage> {
                 itemCount: users.length,
                 itemBuilder: (context, index) {
                   final user = users[index];
+                  return null;
                   //return ListTile(
                   //  title: Text(user.name),
                   //  subtitle: Text(user.email),
-                   // leading: Icon(Icons.person),
+                  // leading: Icon(Icons.person),
                   //);
                 },
               ),

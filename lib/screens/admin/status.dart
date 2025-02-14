@@ -135,7 +135,7 @@ class _buildStatusState extends State<Status>
                     children: [
                       Row(
                         children: [
-                          Container(
+                          SizedBox(
                             width: 300,
                             child: SizedBox(
                               child: TextField(

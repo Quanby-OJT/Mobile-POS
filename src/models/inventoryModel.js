@@ -4,25 +4,25 @@ class InventoryModel {
 
     static async uploadImage(fileBuffer, fileName, fileMimeType) {
         try {
-            const { data, error } = await supabase.storage.from('images').upload(fileName, fileBuffer, {
+            const { data, error } = await supabase.storage.from('product_bucket').upload(fileName, fileBuffer, {
                 contentType: fileMimeType,
             });
 
             if (error) throw error;
 
             // Get the public URL
-            const { data: publicUrlData } = supabase.storage.from('images').getPublicUrl(fileName);
+            const { data: publicUrlData } = supabase.storage.from('product_bucket').getPublicUrl(fileName);
             return publicUrlData.publicUrl;
         } catch (err) {
             throw new Error(`Error uploading image: ${err.message}`);
         }
     }
 
-    static async insertProduct(imageUrl, name, quantity, price) {
+    static async insertProduct(imageUrl, name, quantity, price, category) {
         try {
             const { data, error } = await supabase
-                .from('image_uploads')
-                .insert([{ image_url: imageUrl, name, quantity, price }]);
+                .from('product')
+                .insert([{ image_url: imageUrl, name, quantity, price, category }]);
 
             if (error) throw error;
             return data;
@@ -32,7 +32,7 @@ class InventoryModel {
     }
 
     static async getAllProducts() {
-        const { data, error } = await supabase.from('image_uploads').select('*');
+        const { data, error } = await supabase.from('product').select('*');
     
         if (error) {
             console.error("Error fetching products:", error.message);

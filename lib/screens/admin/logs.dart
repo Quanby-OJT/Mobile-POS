@@ -134,7 +134,7 @@ class _buildLogsState extends State<Logs> with SingleTickerProviderStateMixin {
                     children: [
                       Row(
                         children: [
-                          Container(
+                          SizedBox(
                             width: 300,
                             child: SizedBox(
                               child: TextField(

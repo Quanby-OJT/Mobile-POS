@@ -5,7 +5,8 @@ class UserService {
   //static const String baseUrl = "http://10.0.2.2:3000/api/connection";
   static const String baseUrl = "http://localhost:3000/api/connection";
 
-  static Future<Map<String, dynamic>> loginAuthentication(String email, String password) async {
+  static Future<Map<String, dynamic>> loginAuthentication(
+      String email, String password) async {
     try {
       final response = await http.post(
         Uri.parse('$baseUrl/login-authentication'),
@@ -18,7 +19,8 @@ class UserService {
       print("Response Body: ${response.body}");
 
       // Check if the response is JSON
-      if (response.headers['content-type']?.contains('application/json') ?? false) {
+      if (response.headers['content-type']?.contains('application/json') ??
+          false) {
         final data = jsonDecode(response.body);
 
         if (response.statusCode == 400) {
@@ -45,12 +47,12 @@ class UserService {
     throw Exception("An unknown error occurred.");
   }
 
-  static Future<dynamic> otpAuthentication(String otp, String user_id) async {
+  static Future<dynamic> otpAuthentication(String otp, String userId) async {
     try {
       final response = await http.post(
         Uri.parse('$baseUrl/otp-authentication'),
         headers: {"Content-Type": "application/json"},
-        body: jsonEncode({"otp": otp, "user_id": user_id}),
+        body: jsonEncode({"otp": otp, "user_id": userId}),
       );
 
       // Log response details for debugging
@@ -58,7 +60,8 @@ class UserService {
       print("Response Body: ${response.body}");
 
       // Check if the response is JSON
-      if (response.headers['content-type']?.contains('application/json') ?? false) {
+      if (response.headers['content-type']?.contains('application/json') ??
+          false) {
         final data = jsonDecode(response.body);
 
         if (response.statusCode == 400) {

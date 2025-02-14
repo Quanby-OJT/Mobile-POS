@@ -23,6 +23,8 @@ class _InventoryPageState extends State<InventoryPage> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _quantityController = TextEditingController();
   final TextEditingController _priceController = TextEditingController();
+  final SingleValueDropDownController _categoryController =
+      SingleValueDropDownController();
 
   @override
   void initState() {
@@ -62,9 +64,12 @@ class _InventoryPageState extends State<InventoryPage> {
     String name = _nameController.text.trim();
     String quantity = _quantityController.text.trim();
     String price = _priceController.text.trim();
-    //String category = _categoryController.text.trim();
+    String? category = _categoryController.dropDownValue?.name.trim();
 
-    if (name.isEmpty || quantity.isEmpty || price.isEmpty) {
+    if (name.isEmpty ||
+        quantity.isEmpty ||
+        price.isEmpty ||
+        (category?.isEmpty ?? true)) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Please fill all fields!")),
       );
@@ -77,6 +82,7 @@ class _InventoryPageState extends State<InventoryPage> {
       name,
       quantity,
       price,
+      category ?? "",
     );
 
     if (response != null) {
@@ -99,148 +105,145 @@ class _InventoryPageState extends State<InventoryPage> {
   }
 
   void _showPopupForm(BuildContext context) {
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: Text("Add Product"),
-        content: Container(
-          width: 400, // Adjust width to fit the content
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              // First Column - Form Fields
-              Expanded(
-                flex: 2, // Allocating more space for form inputs
-                child: Column(
-                  
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    TextField(
-                      cursorColor: Colors.black,
-                      controller: _nameController,
-                      decoration: _inputDecoration("Product Name"),
-                    ),
-                    SizedBox(height: 10),
-                    TextField(
-                      cursorColor: Colors.black,
-                      controller: _quantityController,
-                      keyboardType: TextInputType.number,
-                      decoration: _inputDecoration("Quantity"),
-                    ),
-                    SizedBox(height: 10),
-                    TextField(
-                      cursorColor: Colors.black,
-                      controller: _priceController,
-                      keyboardType: TextInputType.number,
-                      decoration: _inputDecoration("Price"),
-                    ),
-                    SizedBox(height: 10),
-                    DropDownTextField(
-                      textFieldDecoration: _inputDecoration("Select an item"),
-                      dropDownList: [
-                        DropDownValueModel(name: 'Appetizers and Salads', value: 'value'),
-                        DropDownValueModel(name: 'Breads and Bakery', value: 'value'),
-                        DropDownValueModel(name: 'Kids Menu', value: 'value'),
-                        DropDownValueModel(name: 'All Day Liberty Gourmet Breakfast', value: 'value'),
-                        DropDownValueModel(name: 'Wraps and Sandwiches', value: 'value'),
-                        DropDownValueModel(name: 'Main Course', value: 'value'),
-                        DropDownValueModel(name: 'Drinks', value: 'value'),
-                        DropDownValueModel(name: 'Desserts', value: 'value')
-                      ],
-                      onChanged: (value) {
-                        print("Selected: ${value.name}");
-                      },
-                    ),
-                  ],
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Add Product"),
+          content: Container(
+            width: 400, // Adjust width to fit the content
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // First Column - Form Fields
+                Expanded(
+                  flex: 2, // Allocating more space for form inputs
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      TextField(
+                        cursorColor: Colors.black,
+                        controller: _nameController,
+                        decoration: _inputDecoration("Product Name"),
+                      ),
+                      SizedBox(height: 10),
+                      TextField(
+                        cursorColor: Colors.black,
+                        controller: _quantityController,
+                        keyboardType: TextInputType.number,
+                        decoration: _inputDecoration("Quantity"),
+                      ),
+                      SizedBox(height: 10),
+                      TextField(
+                        cursorColor: Colors.black,
+                        controller: _priceController,
+                        keyboardType: TextInputType.number,
+                        decoration: _inputDecoration("Price"),
+                      ),
+                      SizedBox(height: 10),
+                      DropDownTextField(
+                        textFieldDecoration: _inputDecoration("Select an item"),
+                        controller: _categoryController,
+                        dropDownList: [
+                          DropDownValueModel(
+                              name: 'Appetizers and Salads', value: 'value'),
+                          DropDownValueModel(
+                              name: 'Breads and Bakery', value: 'value'),
+                          DropDownValueModel(name: 'Kids Menu', value: 'value'),
+                          DropDownValueModel(
+                              name: 'All Day Liberty Gourmet Breakfast',
+                              value: 'value'),
+                          DropDownValueModel(
+                              name: 'Wraps and Sandwiches', value: 'value'),
+                          DropDownValueModel(
+                              name: 'Main Course', value: 'value'),
+                          DropDownValueModel(name: 'Drinks', value: 'value'),
+                          DropDownValueModel(name: 'Desserts', value: 'value')
+                        ],
+                        onChanged: (value) {
+                          print("Selected: ${value.name}");
+                        },
+                      ),
+                    ],
+                  ),
                 ),
-              ),
 
-              SizedBox(width: 20), // Space between columns
+                SizedBox(width: 20), // Space between columns
 
-              // Second Column - Image Picker
-              Expanded(
-                flex: 2, // Less space for image section
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    _imageBytes != null
-                        ? Image.memory(_imageBytes!, height: 150, width: 150, fit: BoxFit.cover)
-                        : Container(
-                            height: 150,
-                            width: 150,
-                            color: Colors.grey[300],
-                            child: Icon(Icons.image, size: 50, color: Colors.grey),
-                          ),
-                    SizedBox(height: 10),
-                    ElevatedButton(
-                      onPressed: _pickImage,
-                      style: ElevatedButton.styleFrom(
+                // Second Column - Image Picker
+                Expanded(
+                  flex: 2, // Less space for image section
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      _imageBytes != null
+                          ? Image.memory(_imageBytes!,
+                              height: 150, width: 150, fit: BoxFit.cover)
+                          : Container(
+                              height: 150,
+                              width: 150,
+                              color: Colors.grey[300],
+                              child: Icon(Icons.image,
+                                  size: 50, color: Colors.grey),
+                            ),
+                      SizedBox(height: 10),
+                      ElevatedButton(
+                        onPressed: _pickImage,
+                        style: ElevatedButton.styleFrom(
                             minimumSize: Size(100, 50),
                             backgroundColor: Color(0xFFC19435),
-                            
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10),
-                              
-                            )
-                          ),
-                      child: Text(
-                        "Pick Image",
-                        style: TextStyle(
-                          color: Colors.white
+                            )),
+                        child: Text(
+                          "Pick Image",
+                          style: TextStyle(color: Colors.white),
                         ),
-                        ),
-                    ),
-                  ],
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-        actions: [
-          ElevatedButton(
-            onPressed: () {
-              _storeImage();
-              Navigator.of(context).pop();
-            },
-            style: ElevatedButton.styleFrom(
-                            minimumSize: Size(100, 50),
-                            backgroundColor: Colors.green,
-                            
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              
-                            )
-                          ),
-            child: Text(
-              "Submit",
-              style: TextStyle(
-                color: Colors.white
+          actions: [
+            ElevatedButton(
+              onPressed: () {
+                _storeImage();
+                Navigator.of(context).pop();
+              },
+              style: ElevatedButton.styleFrom(
+                  minimumSize: Size(100, 50),
+                  backgroundColor: Colors.green,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  )),
+              child: Text(
+                "Submit",
+                style: TextStyle(color: Colors.white),
               ),
-              ),
-          ),
-        ],
-      );
-    },
-  );
-}
+            ),
+          ],
+        );
+      },
+    );
+  }
 
 // Reusable input decoration
-InputDecoration _inputDecoration(String label) {
-  return InputDecoration(
-    labelText: label,
-    labelStyle: TextStyle(color: Colors.black),
-    enabledBorder: OutlineInputBorder(
-      borderSide: BorderSide(color: Colors.black),
-      borderRadius: BorderRadius.circular(10),
-    ),
-    focusedBorder: OutlineInputBorder(
-      borderSide: BorderSide(color: Colors.black),
-      borderRadius: BorderRadius.circular(10),
-    ),
-  );
-}
-
+  InputDecoration _inputDecoration(String label) {
+    return InputDecoration(
+      labelText: label,
+      labelStyle: TextStyle(color: Colors.black),
+      enabledBorder: OutlineInputBorder(
+        borderSide: BorderSide(color: Colors.black),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderSide: BorderSide(color: Colors.black),
+        borderRadius: BorderRadius.circular(10),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -249,12 +252,10 @@ InputDecoration _inputDecoration(String label) {
       home: Scaffold(
         backgroundColor: Color(0xFFF4F1F8),
         appBar: AppBar(
-          
-          backgroundColor:Color(0xFFF4F1F8),
-          title: Padding(
-            padding: EdgeInsets.only(left: 20),
-            child: Text('Inventory Management'))
-          ),
+            backgroundColor: Color(0xFFF4F1F8),
+            title: Padding(
+                padding: EdgeInsets.only(left: 20),
+                child: Text('Inventory Management'))),
         body: Column(
           children: [
             Padding(
@@ -262,30 +263,30 @@ InputDecoration _inputDecoration(String label) {
               child: Align(
                 alignment: Alignment.topLeft,
                 child: SizedBox(
-                   width:  200,
-                    child: TextField(
-                      cursorColor: Colors.black,
-                      decoration: InputDecoration(
-                        hintText: 'Search product...',
-                        filled: true,
-                        fillColor: Colors.white,
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(color: Colors.grey),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(color: Colors.grey),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        prefixIcon: const Icon(Icons.search, color: Colors.grey),
+                  width: 200,
+                  child: TextField(
+                    cursorColor: Colors.black,
+                    decoration: InputDecoration(
+                      hintText: 'Search product...',
+                      filled: true,
+                      fillColor: Colors.white,
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(color: Colors.grey),
+                        borderRadius: BorderRadius.circular(10),
                       ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(color: Colors.grey),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      prefixIcon: const Icon(Icons.search, color: Colors.grey),
                     ),
                   ),
+                ),
               ),
             ),
             Padding(
-              
-              padding: EdgeInsets.only(top: 16, bottom: 16, left: 30, right: 30),
+              padding:
+                  EdgeInsets.only(top: 16, bottom: 16, left: 30, right: 30),
               child: Container(
                 padding: EdgeInsets.all(20),
                 decoration: BoxDecoration(
@@ -294,36 +295,29 @@ InputDecoration _inputDecoration(String label) {
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  
                   children: [
-                    
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
                           'Product List',
-                          style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                              fontSize: 22, fontWeight: FontWeight.bold),
                         ),
                         ElevatedButton(
-                          
                           onPressed: () => _showPopupForm(context),
-                          
                           style: ElevatedButton.styleFrom(
-                            minimumSize: Size(100, 50),
-                            backgroundColor: Color(0xFFC19435),
-                            
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              
-                            )
-                          ),
+                              minimumSize: Size(100, 50),
+                              backgroundColor: Color(0xFFC19435),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              )),
                           child: Text(
                             "Add Product",
                             style: TextStyle(
                               color: Colors.white,
-                              
                             ),
-                            ),
+                          ),
                         ),
                       ],
                     ),
@@ -333,15 +327,12 @@ InputDecoration _inputDecoration(String label) {
                         scrollDirection: Axis.horizontal,
                         child: SingleChildScrollView(
                           scrollDirection: Axis.vertical,
-                          
                           child: DataTableTheme(
                             data: DataTableThemeData(
-                              
                               dataRowMinHeight: 50, // Minimum height of the row
                               dataRowMaxHeight: 70,
                             ),
                             child: DataTable(
-                              
                               columns: [
                                 DataColumn(label: Text('Image')),
                                 DataColumn(label: Text('Product Name')),
@@ -350,25 +341,34 @@ InputDecoration _inputDecoration(String label) {
                                 DataColumn(label: Text('Stock')),
                                 DataColumn(label: Text('Category')),
                                 DataColumn(label: Text('Status')),
-                                DataColumn(label: Text('Action' ))
+                                DataColumn(label: Text('Action'))
                               ],
                               rows: _products.map((product) {
                                 return DataRow(cells: [
                                   DataCell(
-                                    product['image_url'] != null && product['image_url'].isNotEmpty
-                                        ? Image.network(product['image_url'], width: 50, height: 50)
+                                    product['image_url'] != null &&
+                                            product['image_url'].isNotEmpty
+                                        ? Image.network(product['image_url'],
+                                            width: 50, height: 50)
                                         : Icon(Icons.image_not_supported),
                                   ),
                                   DataCell(Text(product['name'] ?? 'N/A')),
-                                  DataCell(Text(product['product_id']?.toString() ?? 'N/A')),
-                                  DataCell(Text(product['price'] != null ? '\$${product['price']}' : 'N/A')),
-                                  DataCell(Text(product['quantity']?.toString() ?? 'N/A')),
+                                  DataCell(
+                                      Text(product['id']?.toString() ?? 'N/A')),
+                                  DataCell(Text(product['price'] != null
+                                      ? '\$${product['price']}'
+                                      : 'N/A')),
+                                  DataCell(Text(
+                                      product['quantity']?.toString() ??
+                                          'N/A')),
                                   DataCell(Text(product['category'] ?? 'N/A')),
                                   DataCell(
                                     Container(
-                                      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 8, vertical: 4),
                                       decoration: BoxDecoration(
-                                        color: _getStatusColor(product['status'] ?? ''),
+                                        color: _getStatusColor(
+                                            product['status'] ?? ''),
                                         borderRadius: BorderRadius.circular(8),
                                       ),
                                       child: Text(

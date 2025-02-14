@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class ViewOrder extends StatelessWidget {
   final String order;
 
-  const ViewOrder({Key? key, required this.order}) : super(key: key);
+  const ViewOrder({super.key, required this.order});
 
   @override
   Widget build(BuildContext context) {

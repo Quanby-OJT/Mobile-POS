@@ -5,7 +5,7 @@ import 'package:http_parser/http_parser.dart';
 
 class ApiService {
   static Future<String?> uploadImage(Uint8List imageBytes, String fileName,
-      String name, String quantity, String price) async {
+      String name, String quantity, String price, String category) async {
     try {
       var uri = Uri.parse('http://localhost:3000/connection/add-product');
       var request = http.MultipartRequest('POST', uri);
@@ -13,6 +13,7 @@ class ApiService {
       request.fields['name'] = name;
       request.fields['quantity'] = quantity;
       request.fields['price'] = price;
+      request.fields['category'] = category;
 
       request.files.add(
         http.MultipartFile.fromBytes(

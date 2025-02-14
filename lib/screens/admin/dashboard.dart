@@ -4,6 +4,8 @@ import 'package:mobile_pos/screens/admin/graph/product.dart';
 import 'package:mobile_pos/screens/admin/graph/sale.dart';
 
 class AdminDashboard extends StatelessWidget {
+  const AdminDashboard({super.key});
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
