@@ -40,7 +40,7 @@ class UserModel {
             .eq('user_id', user_id)
             .single(); // Ensures we fetch only one record
         
-        console.log({ data: existingRecord, error: fetchError });
+        //console.log({ data: existingRecord, error: fetchError });
 
         if (fetchError && fetchError.code !== 'PGRST116') { // Ignore "No rows found" error
             throw new Error(fetchError.message);
@@ -49,8 +49,6 @@ class UserModel {
         let response;
 
         if (existingRecord) {
-            // If user_id exists, update two_fa_code and two_fa_code_expires_at
-            console.log(existingRecord)
             const { data, error } = await supabase
                 .from('two_fa_code')
                 .update([{
@@ -61,7 +59,7 @@ class UserModel {
 
 
             if (error) throw new Error(error.message);
-            console.log(data)
+            //console.log(data)
 
             response = data;
         } else {
@@ -84,8 +82,8 @@ class UserModel {
 
     static async attemptOTPAuth(user_id)
     {
-        const {data, error} = await supabase.from('two_fa_code').select('two_fa_code, two_fa_code_expires_at').eq('user_id', user_id).single()
-        //console.log({ data, error }); // Log the response for debugging
+        const {data, error} = await supabase.from('two_fa_code').select('user (roles (role_id, user_roles)), two_fa_code, two_fa_code_expires_at').eq('user_id', user_id).single()
+        //console.log("Data: " + { data, error }); // Log the response for debugging
     
         if (error) throw new Error(error.message || "An unknown database error occurred."); // Handle missing message
 
@@ -95,16 +93,50 @@ class UserModel {
     static async resetOTPAuth(user_id)
     {
         const { data, error } = await supabase.from('two_fa_code').update([{ two_fa_code: null, two_fa_code_expires_at: null }]).eq('user_id', user_id);
-        //console.log({ data, error }); // Log the response for debugging
         if (error) throw new Error(error.message);
     }
 
-    static async userSession(user_id)
+    static async createSession(user_id, role_id, token)
     {
-        const {data, error} = await supabase.from('users').select('roles (role_id, user_roles)').eq('user_id', user_id)
-        //console.log({ data, error }); // Log the response for debugging
-        if (error) throw new Error(error.message)
-        return data;
+        const timestamp = new Date();
+        const expires_at = new Date()
+
+        expires_at.setHours(expires_at.getHours() + 1)
+        const {data: existingSession, error: sessionError} = await supabase.from('sessions').select('user_id').eq('user_id', user_id).single();
+
+        if (sessionError && sessionError.code !== 'PGRST116') { // Ignore "No rows found" error
+            throw new Error(sessionError.message);
+        }
+
+        let response;
+
+        if (existingSession) {
+            const {data, error} = await supabase.from('sessions').update([{
+                unique_token: token,
+                created_at: timestamp,
+                session_expires_at: expires_at
+            }]).eq('user_id', user_id).eq('role_id', role_id)
+
+            if (error) throw new Error(error.message);
+            console.log(data)
+
+            response = data;
+        }else{
+            const {data, error} = await supabase.from('sessions').insert([{
+                user_id,
+                role_id,
+                unique_token: token,
+                created_at: timestamp,
+                session_expires_at: expires_at
+            }]);
+    
+            //console.log("Session: " + { data, error }); // Log the response for debugging
+    
+            if(error) throw new Error(error.message)
+            response = data;
+        }
+
+        return {data: response};
     }
 }
 

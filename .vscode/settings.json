@@ -1,3 +1,12 @@
 {
-    "cmake.sourceDirectory": "C:/Users/Ederson/OneDrive/Documents/GitHub/Mobile-POS/linux"
+    "cmake.sourceDirectory": "C:/Users/Ederson/OneDrive/Documents/GitHub/Mobile-POS/linux",
+
+    "terminal.integrated.profiles.windows": {
+        "PowerShell": {
+            "source": "PowerShell",
+            "icon": "terminal-powershell",
+            "args": ["-ExecutionPolicy", "Bypass"]
+        }
+    },
+    "terminal.integrated.defaultProfile.windows": "PowerShell",
 }

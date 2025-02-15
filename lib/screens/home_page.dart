@@ -63,7 +63,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Mobile Application")),
+      appBar: AppBar(title: Text("Welcome to Quanby's State-of-the-Art Mobile Point-of-Sale Application")),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
