@@ -48,6 +48,7 @@ class InventoryController {
     static async getAllProducts(req, res) {
         try {
             const products = await InventoryModel.getAllProducts();
+            console.log(products);
             res.json(products);
         } catch (err) {
             res.status(500).json({ error: err.message });

@@ -32,15 +32,29 @@ class InventoryModel {
     }
 
     static async getAllProducts() {
-        const { data, error } = await supabase.from('product').select('*');
-    
+        const { data, error } = await supabase
+            .from('product')
+            .select(`
+                id, 
+                name, 
+                created_at, 
+                quantity, 
+                price, 
+                product_status, 
+                image_url, 
+                ingredients_id, 
+                discount, 
+                categories:category_id(category) 
+            `)
+            .order('created_at', { ascending: false }); 
+        
         if (error) {
             console.error("Error fetching products:", error.message);
             return [];
         }
     
         return data || [];
-    }
+    }    
 }
 
 module.exports = InventoryModel;
