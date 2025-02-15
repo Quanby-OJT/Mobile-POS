@@ -1,1 +1,0 @@
- C:\\Users\\loric\\OneDrive\\Documents\\IT\ 4th\ Year\\2nd\ Semester\\MAIN\ PROJECT\\Mobile-POS\\.dart_tool\\flutter_build\\882db8a8fdfe9a57da7c04d547e93273\\native_assets.yaml: 

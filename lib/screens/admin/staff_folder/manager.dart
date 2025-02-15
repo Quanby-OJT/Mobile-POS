@@ -1,4 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:dropdown_textfield/dropdown_textfield.dart';
+import 'dart:typed_data';
+import 'dart:convert';
+import 'package:dropdown_textfield/dropdown_textfield.dart';
+import 'package:flutter/material.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:mobile_pos/services/api_service.dart';
+
+import 'package:mobile_pos/controller/manager.dart';
 
 class buildManagerTable extends StatefulWidget {
   const buildManagerTable({super.key});
@@ -25,8 +34,24 @@ class Manager {
 
 class _buildManagerTableState extends State<buildManagerTable>
     with SingleTickerProviderStateMixin {
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _middleController = TextEditingController();
+  final TextEditingController _lastController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _activationController = TextEditingController();
+  final TextEditingController _birthdayController = TextEditingController();
+
+  final ManagerController _managerController = ManagerController();
+
+  Uint8List? _imageBytes;
+  String? _imageName;
+  String? _imageUrl;
+  List<dynamic> _products = [];
+  bool _showForm = false;
+
   String numberSet = '20';
   int currentPage = 1;
+
   final int totalPages = 5;
 
   void _nextPage(int page) {
@@ -42,140 +67,7 @@ class _buildManagerTableState extends State<buildManagerTable>
       contact: "1231231234",
       activation: 'enabled',
       status: 'active',
-    ),
-    Manager(
-      profileImage: "https://via.placeholder.com/150",
-      fullname: "Michael C. Smith",
-      contact: "1231231234",
-      activation: 'disabled',
-      status: 'inactive',
-    ),
-    Manager(
-      profileImage: "https://via.placeholder.com/150",
-      fullname: "Sarah D. Lee",
-      contact: "4564564567",
-      activation: 'enabled',
-      status: 'active',
-    ),
-    Manager(
-      profileImage: "https://via.placeholder.com/150",
-      fullname: "Robert T. Brown",
-      contact: "7897897890",
-      activation: 'enabled',
-      status: 'active',
-    ),
-    Manager(
-      profileImage: "https://via.placeholder.com/150",
-      fullname: "Jessica M. Garcia",
-      contact: "1112223333",
-      activation: 'disabled',
-      status: 'inactive',
-    ),
-    Manager(
-      profileImage: "https://via.placeholder.com/150",
-      fullname: "David R. Wilson",
-      contact: "5556667777",
-      activation: 'enabled',
-      status: 'active',
-    ),
-    Manager(
-      profileImage: "https://via.placeholder.com/150",
-      fullname: "Emily H. Martinez",
-      contact: "9998887777",
-      activation: 'enabled',
-      status: 'active',
-    ),
-    Manager(
-      profileImage: "https://via.placeholder.com/150",
-      fullname: "Daniel O. Clark",
-      contact: "4445556666",
-      activation: 'disabled',
-      status: 'inactive',
-    ),
-    Manager(
-      profileImage: "https://via.placeholder.com/150",
-      fullname: "Laura P. White",
-      contact: "7778889999",
-      activation: 'enabled',
-      status: 'active',
-    ),
-    Manager(
-      profileImage: "https://via.placeholder.com/150",
-      fullname: "James L. Hernandez",
-      contact: "3334445555",
-      activation: 'enabled',
-      status: 'active',
-    ),
-    Manager(
-      profileImage: "https://via.placeholder.com/150",
-      fullname: "Alice B. Johnson",
-      contact: "0987654321",
-      activation: 'enabled',
-      status: 'active',
-    ),
-    Manager(
-      profileImage: "https://via.placeholder.com/150",
-      fullname: "Michael C. Smith",
-      contact: "1231231234",
-      activation: 'disabled',
-      status: 'inactive',
-    ),
-    Manager(
-      profileImage: "https://via.placeholder.com/150",
-      fullname: "Sarah D. Lee",
-      contact: "4564564567",
-      activation: 'enabled',
-      status: 'active',
-    ),
-    Manager(
-      profileImage: "https://via.placeholder.com/150",
-      fullname: "Robert T. Brown",
-      contact: "7897897890",
-      activation: 'enabled',
-      status: 'active',
-    ),
-    Manager(
-      profileImage: "https://via.placeholder.com/150",
-      fullname: "Jessica M. Garcia",
-      contact: "1112223333",
-      activation: 'disabled',
-      status: 'inactive',
-    ),
-    Manager(
-      profileImage: "https://via.placeholder.com/150",
-      fullname: "David R. Wilson",
-      contact: "5556667777",
-      activation: 'enabled',
-      status: 'active',
-    ),
-    Manager(
-      profileImage: "https://via.placeholder.com/150",
-      fullname: "Emily H. Martinez",
-      contact: "9998887777",
-      activation: 'enabled',
-      status: 'active',
-    ),
-    Manager(
-      profileImage: "https://via.placeholder.com/150",
-      fullname: "Daniel O. Clark",
-      contact: "4445556666",
-      activation: 'disabled',
-      status: 'inactive',
-    ),
-    Manager(
-      profileImage: "https://via.placeholder.com/150",
-      fullname: "Laura P. White",
-      contact: "7778889999",
-      activation: 'enabled',
-      status: 'active',
-    ),
-    Manager(
-      profileImage: "https://via.placeholder.com/150",
-      fullname: "James L. Hernandez",
-      contact: "3334445555",
-      activation: 'enabled',
-      status: 'active',
-    ),
+    )
   ];
 
   void _showManagerFilter() {
@@ -192,7 +84,210 @@ class _buildManagerTableState extends State<buildManagerTable>
     );
   }
 
-  void _onAddPressed(BuildContext context) {}
+  Future<void> _pickImage() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.image,
+    );
+
+    if (result != null) {
+      setState(() {
+        _imageBytes = result.files.first.bytes;
+        _imageName = result.files.first.name;
+      });
+    }
+  }
+
+  void _onAddManager(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Add Manager"),
+          content: Container(
+            width: 500, // Adjust width to fit the content
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // First Column - Form Fields
+                Expanded(
+                  flex: 2, // Allocating more space for form inputs
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      TextField(
+                        cursorColor: Colors.black,
+                        controller: _nameController,
+                        decoration: _inputDecoration("First Name"),
+                      ),
+                      SizedBox(height: 10),
+                      TextField(
+                        cursorColor: Colors.black,
+                        controller: _middleController,
+                        keyboardType: TextInputType.number,
+                        decoration: _inputDecoration("Middle Name"),
+                      ),
+                      SizedBox(height: 10),
+                      TextField(
+                        cursorColor: Colors.black,
+                        controller: _lastController,
+                        keyboardType: TextInputType.number,
+                        decoration: _inputDecoration("Last Name"),
+                      ),
+                      SizedBox(height: 10),
+                      TextField(
+                        cursorColor: Colors.black,
+                        controller: _birthdayController,
+                        keyboardType: TextInputType.number,
+                        decoration: _inputDecoration("Birthday"),
+                      ),
+                      SizedBox(height: 10),
+                      TextField(
+                        cursorColor: Colors.black,
+                        controller: _emailController,
+                        keyboardType: TextInputType.number,
+                        decoration: _inputDecoration("Email"),
+                      ),
+                      SizedBox(height: 10),
+                      DropDownTextField(
+                        textFieldDecoration:
+                            _inputDecoration("Select an activation"),
+                        dropDownList: [
+                          DropDownValueModel(
+                              name: 'disable', value: 'disabled'),
+                          DropDownValueModel(name: 'enable', value: 'enabled'),
+                        ],
+                        onChanged: (value) {
+                          print("Selected: ${value.name}");
+                          _activationController.text = value.name;
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+
+                SizedBox(width: 20), // Space between columns
+
+                // Second Column - Image Picker
+                Expanded(
+                  flex: 2, // Less space for image section
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      _imageBytes != null
+                          ? Image.memory(_imageBytes!,
+                              height: 150, width: 150, fit: BoxFit.cover)
+                          : Container(
+                              height: 150,
+                              width: 150,
+                              color: Colors.grey[300],
+                              child: Icon(Icons.image,
+                                  size: 50, color: Colors.grey),
+                            ),
+                      SizedBox(height: 10),
+                      ElevatedButton(
+                        onPressed: () {
+                          _pickImage;
+                        },
+                        style: ElevatedButton.styleFrom(
+                            minimumSize: Size(100, 50),
+                            backgroundColor: Color(0xFFC19435),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            )),
+                        child: Text(
+                          "Pick Image",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          actions: [
+            ElevatedButton(
+              onPressed: () async {
+                String name = _nameController.text;
+                String middle = _middleController.text;
+                String last = _lastController.text;
+                String birthday = _birthdayController.text;
+                String email = _emailController.text;
+                String activation = _activationController.text;
+                String role = "Manager";
+                _storeImage(
+                    name, middle, last, birthday, email, role, activation);
+
+                Navigator.of(context).pop();
+              },
+              style: ElevatedButton.styleFrom(
+                  minimumSize: Size(100, 50),
+                  backgroundColor: Colors.green,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  )),
+              child: Text(
+                "Add manager",
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _storeImage(String name, String middle, String last,
+      String birthday, String email, String role, String activation) async {
+    if (_imageBytes == null || _imageName == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Please select an image first!")),
+      );
+      return;
+    }
+    //String category = _categoryController.text.trim();
+
+    if (name.isEmpty ||
+        middle.isEmpty ||
+        last.isEmpty ||
+        birthday.isEmpty ||
+        email.isEmpty ||
+        role.isEmpty ||
+        activation.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Please fill all fields!")),
+      );
+      return;
+    }
+
+    String? response = await _managerController.submitManager(
+      _imageBytes!,
+      _imageName!,
+      name,
+      last,
+      middle,
+      birthday,
+      email,
+      role,
+      activation,
+    );
+
+    if (response != null) {
+      setState(() {
+        _imageUrl = response;
+        _showForm = false;
+      });
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Image uploaded successfully!")),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Error uploading image!")),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Expanded(
@@ -290,9 +385,9 @@ class _buildManagerTableState extends State<buildManagerTable>
                           ),
                           const SizedBox(width: 20),
                           ElevatedButton.icon(
-                            onPressed: () => _onAddPressed(context),
+                            onPressed: () => _onAddManager(context),
                             icon: const Icon(Icons.add),
-                            label: const Text("Add"),
+                            label: const Text("Add Manager"),
                             style: ElevatedButton.styleFrom(
                               minimumSize: Size(100, 55),
                               shape: RoundedRectangleBorder(
@@ -575,5 +670,21 @@ class _buildManagerTableState extends State<buildManagerTable>
         ],
       ),
     ));
+  }
+
+  // Reusable input decoration
+  InputDecoration _inputDecoration(String label) {
+    return InputDecoration(
+      labelText: label,
+      labelStyle: TextStyle(color: Colors.black),
+      enabledBorder: OutlineInputBorder(
+        borderSide: BorderSide(color: Colors.black),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderSide: BorderSide(color: Colors.black),
+        borderRadius: BorderRadius.circular(10),
+      ),
+    );
   }
 }
